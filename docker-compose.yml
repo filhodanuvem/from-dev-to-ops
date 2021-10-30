@@ -1,0 +1,13 @@
+version: '3.8'
+services: 
+  localstack: 
+    image: localstack/localstack-full:0.12.17.5
+    environment:
+      - SERVICES=dynamodb,ec2,sqs,sns,iam,kinesis,lambda
+      - DEBUG=1
+      - ENFORCE_IAM=1
+      - HOSTNAME_EXTERNAL=localstack
+      - LAMBDA_FORWARD_URL=http://localhost:4567
+    ports:
+      - "4566:4566" 
+      - "8089:8089"
