@@ -1,0 +1,4 @@
+.terraform*
+terraform.tfstate*
+output.json
+lambda.zip
