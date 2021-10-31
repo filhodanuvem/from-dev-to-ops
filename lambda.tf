@@ -31,6 +31,11 @@ resource "aws_lambda_function" "test_lambda" {
 
   runtime = "go1.x"
 
+  # vpc_config {
+  #   subnet_ids = [aws_subnet.main.id]
+  #   security_group_ids = []
+  # }
+
   environment {
     variables = {
       foo = "bar"

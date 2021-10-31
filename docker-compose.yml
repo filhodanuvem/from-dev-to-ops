@@ -7,7 +7,11 @@ services:
       - DEBUG=1
       - ENFORCE_IAM=1
       - HOSTNAME_EXTERNAL=localstack
-      - LAMBDA_FORWARD_URL=http://localhost:4567
+      - LAMBDA_EXECUTOR=docker-reuse
+      - LAMBDA_REMOTE_DOCKER=true
+      - DOCKER_HOST=unix:///var/run/docker.sock
     ports:
       - "4566:4566" 
       - "8089:8089"
+    volumes: 
+      - "/var/run/docker.sock:/var/run/docker.sock"
