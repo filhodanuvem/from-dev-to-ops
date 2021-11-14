@@ -18,6 +18,11 @@ resource "aws_iam_role" "iam_for_lambda" {
 EOF
 }
 
+resource "aws_iam_role_policy_attachment" "AWSLambdaVPCAccessExecutionRole" {
+    role       = aws_iam_role.iam_for_lambda.name
+    policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+}
+
 resource "aws_lambda_function" "test_lambda" {
   filename      = "lambda.zip"
   function_name = "lambda_function_name"
@@ -31,14 +36,10 @@ resource "aws_lambda_function" "test_lambda" {
 
   runtime = "go1.x"
 
-  # vpc_config {
-  #   subnet_ids = [aws_subnet.main.id]
-  #   security_group_ids = []
-  # }
+  timeout = 30
 
-  environment {
-    variables = {
-      foo = "bar"
-    }
+  vpc_config {
+    subnet_ids = [aws_subnet.private.id]
+    security_group_ids = [aws_default_security_group.default.id]
   }
 }
