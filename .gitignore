@@ -3,3 +3,4 @@ terraform.tfstate*
 output.json
 lambda.zip
 .env
+./lambda/main
