@@ -4,3 +4,4 @@ output.json
 lambda.zip
 .env
 ./lambda/main
+kubeconfig_*
