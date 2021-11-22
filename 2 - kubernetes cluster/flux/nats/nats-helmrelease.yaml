@@ -6,7 +6,7 @@ metadata:
 spec:
   chart:
     git: git@github.com:nats-io/k8s.git
-    path: helm/charts/
+    path: helm/charts/nats
     ref: master
   values:
     nats:
