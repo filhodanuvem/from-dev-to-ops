@@ -5,7 +5,7 @@ metadata:
   namespace: default
 spec:
   chart:
-    git: git@github.com:nats-io/k8s.git
+    git: git@github.com/nats-io/k8s.git
     path: helm/charts/
     ref: master
   values:
