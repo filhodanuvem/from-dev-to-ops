@@ -3,10 +3,10 @@ kind: HelmRelease
 metadata:
   name: nats
   namespace: default
+chart:
+  git: git@github.com/nats-io/k8s.git
+  path: helm/charts/
+  ref: master
 spec:
-  chart:
-    git: git@github.com/nats-io/k8s.git
-    path: helm/charts/
-    ref: master
   values:
     nats:
