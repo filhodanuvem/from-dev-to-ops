@@ -10,7 +10,7 @@ variable "github_token" {
 
 variable "repository_name" {
   type        = string
-  default     = "terraform-study"
+  default     = "infra-study"
   description = "github repository name"
 }
 

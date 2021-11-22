@@ -14,6 +14,16 @@ terraform {
       source  = "gavinbunney/kubectl"
       version = ">= 1.10.0"
     }
+
+    tls = {
+      source  = "hashicorp/tls"
+      version = "3.1.0"
+    }
+
+    github = {
+      source = "integrations/github"
+      version = ">= 4.5.2"
+    }
   }
 }
 
@@ -31,6 +41,10 @@ provider "kubectl" {
 
 }
 
+provider "github" {
+  owner = var.github_owner
+  token = var.github_token
+}
 
 provider "kubernetes" {
   host                   = data.aws_eks_cluster.eks.endpoint
