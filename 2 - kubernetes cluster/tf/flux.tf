@@ -81,7 +81,7 @@ resource "kubernetes_secret" "main" {
 
 
 resource "github_repository_deploy_key" "main" {
-  title      = "staging-cluster"
+  title      = "aws-cluster"
   repository = var.repository_name
   key        = tls_private_key.main.public_key_openssh
   read_only  = true

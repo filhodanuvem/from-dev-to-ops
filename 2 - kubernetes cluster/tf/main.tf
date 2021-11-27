@@ -37,15 +37,17 @@ provider "flux" {
   # Configuration options
 }
 
-provider "kubectl" {
-
-}
-
 provider "github" {
   owner = var.github_owner
   token = var.github_token
 }
 
+provider "kubectl" {
+  load_config_file       = false
+  host                   = data.aws_eks_cluster.eks.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.eks.token
+}
 provider "kubernetes" {
   host                   = data.aws_eks_cluster.eks.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
