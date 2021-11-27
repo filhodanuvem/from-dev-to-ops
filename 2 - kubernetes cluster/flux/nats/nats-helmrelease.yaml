@@ -4,6 +4,7 @@ metadata:
   name: nats
   namespace: default
 spec:
+  interval: 1m
   chart:
     spec:
       chart: nats
