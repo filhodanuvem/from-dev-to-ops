@@ -3,16 +3,6 @@ kind: HelmRelease
 metadata:
   name: nats
   namespace: default
-# spec:
-#   interval: 1m
-#   chart:
-#     spec:
-#       chart: nats
-#       sourceRef:
-#         kind: HelmRepository
-#         name: nats
-#         namespace: flux-system
-#       interval: 1m
 spec:
   chart:
     spec:
@@ -21,5 +11,6 @@ spec:
         kind: HelmRepository
         name: nats
         namespace: flux-system
+      interval: 1m
   values:
     nats:
