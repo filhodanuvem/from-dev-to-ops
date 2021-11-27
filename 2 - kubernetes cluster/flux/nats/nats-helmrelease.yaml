@@ -1,12 +1,13 @@
-apiVersion: helm.fluxcd.io/v1
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: nats
   namespace: default
 spec:
   chart:
-    git: github.com:nats-io/k8s.git
-    path: helm/charts/nats
-    ref: master
+    spec:
+      chart: nats
+      sourceRef: HelmRepository
+      name: nats
   values:
     nats:
