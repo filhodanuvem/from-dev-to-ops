@@ -7,7 +7,9 @@ spec:
   chart:
     spec:
       chart: nats
-      sourceRef: HelmRepository
-      name: nats
+      sourceRef: 
+        Kind: HelmRepository
+        name: nats
+        namespace: flux-system
   values:
     nats:
