@@ -1,0 +1,9 @@
+input:
+  label: ""
+  nats_jetstream:
+    urls:
+      - nats://nats:4222
+    # queue: ""
+    subject: "purchases"
+    durable: ""
+    # deliver: all
