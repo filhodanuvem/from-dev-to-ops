@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: benthos-consumer
+  labels:
+    app: benthos-consumer
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: benthos-consumer
+  template:
+    metadata:
+      labels:
+        app: benthos-consumer
+    spec:
+      containers:
+      - name: benthos
+        image: jeffail/benthos:latest
