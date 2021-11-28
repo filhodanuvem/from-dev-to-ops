@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: benthos-consumer
-  namespace: filhodanuvem-service
+  namespace: filhodanuvem-services
   labels:
     app: benthos-consumer
 spec:
