@@ -18,7 +18,7 @@ spec:
       containers:
         - name: benthos
           image: jeffail/benthos:latest
-          command: "benthos -c /etc/config/benthos-config.yaml"
+          command: ["benthos", "-c", "/etc/config/benthos-config.yaml"]
           volumeMounts:
           - name: config-volume
             mountPath: /etc/config
