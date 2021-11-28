@@ -1,3 +1,7 @@
+apiVersion: v1beta1
+kind: Kustomization
+namespace: filhodanuvem-services
+
 configMapGenerator:
 - name: benthos-consumer-config
   files:
