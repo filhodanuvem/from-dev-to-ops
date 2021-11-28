@@ -16,13 +16,13 @@ spec:
         app: benthos-consumer
     spec:
       containers:
-      - name: benthos
-        image: jeffail/benthos:latest
-        command: "benthos -c /etc/config/benthos-config.yaml"
-        volumeMounts:
-        - name: config-volume
-          mountPath: /etc/config
+        - name: benthos
+          image: jeffail/benthos:latest
+          command: "benthos -c /etc/config/benthos-config.yaml"
+          volumeMounts:
+          - name: config-volume
+            mountPath: /etc/config
       volumes:
-      - name: config-volume
-        configMap:
-          name: benthos-consumer-config
+        - name: config-volume
+          configMap:
+            name: benthos-consumer-config
