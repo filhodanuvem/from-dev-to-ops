@@ -2,7 +2,7 @@ input:
   label: ""
   nats_jetstream:
     urls:
-      - nats://nats:4222
+      - nats://nats-0.nats.filhodanuvem-services.svc.cluster.local:4222
     # queue: ""
     subject: "purchases"
     # durable: ""
