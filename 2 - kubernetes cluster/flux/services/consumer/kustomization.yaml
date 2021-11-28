@@ -1,2 +1,2 @@
 resources:
-  - ./benthos-helmrepository.yaml
+  - ./benthos.yaml
