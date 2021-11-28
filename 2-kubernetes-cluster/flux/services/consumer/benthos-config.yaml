@@ -5,5 +5,5 @@ input:
       - nats://nats:4222
     # queue: ""
     subject: "purchases"
-    durable: ""
+    # durable: ""
     # deliver: all
