@@ -1,0 +1,20 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: nats
+  namespace: filhodanuvem-services
+spec:
+  interval: 1m
+  chart:
+    spec:
+      chart: nats
+      version: 0.9.2
+      sourceRef: 
+        kind: HelmRepository
+        name: nats
+        namespace: flux-system
+      interval: 1m
+  values:
+    nats: 
+      jetstream:
+        enabled: true

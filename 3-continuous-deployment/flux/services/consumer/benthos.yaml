@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: benthos-consumer
+  namespace: filhodanuvem-services
+  labels:
+    app: benthos-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: benthos-consumer
+  template:
+    metadata:
+      labels:
+        app: benthos-consumer
+    spec:
+      containers:
+        - name: benthos
+          image: jeffail/benthos:latest
+          command: ["/benthos", "-c", "/etc/config/benthos-config.yaml"]
+          volumeMounts:
+          - name: config-volume
+            mountPath: /etc/config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: benthos-consumer-config

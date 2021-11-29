@@ -1,3 +1,0 @@
-resources:
-  - ./nats-helmrepository.yaml
-  - ./nats-helmrelease.yaml

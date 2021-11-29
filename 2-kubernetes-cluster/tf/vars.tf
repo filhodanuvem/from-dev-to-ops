@@ -28,6 +28,6 @@ variable "branch" {
 
 variable "target_path" {
   type        = string
-  default     = "./3-flux-cd/flux"
+  default     = "./3-continuous-deployment/flux"
   description = "flux sync target path"
 }
