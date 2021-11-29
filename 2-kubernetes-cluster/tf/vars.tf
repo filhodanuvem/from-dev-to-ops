@@ -28,6 +28,6 @@ variable "branch" {
 
 variable "target_path" {
   type        = string
-  default     = "./2-kubernetes-cluster/flux"
+  default     = "./3-flux-cd/flux"
   description = "flux sync target path"
 }
