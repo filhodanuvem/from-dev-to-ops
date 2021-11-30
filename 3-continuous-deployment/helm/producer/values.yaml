@@ -5,5 +5,5 @@
 replicaCount: 1
 
 nats:
-  url: "http://nats:4222"
-  subject: "purchases"
+  url: ""
+  subject: ""
