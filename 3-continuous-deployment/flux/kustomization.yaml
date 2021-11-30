@@ -2,3 +2,4 @@ resources:
   - ./namespace
   - ./infrastructure/nats
   - ./services/consumer
+  - ./services/producer

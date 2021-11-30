@@ -1,0 +1,4 @@
+namespace: filhodanuvem-services
+
+resources:
+  - ./producer-helmrelease.yaml
