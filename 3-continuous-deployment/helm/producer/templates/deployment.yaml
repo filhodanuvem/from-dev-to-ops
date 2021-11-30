@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: producer
+  namespace: filhodanuvem-services
+  labels:
+    app: producer
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: producer
+  template:
+    metadata:
+      labels:
+        app: producer
+    spec:
+      containers:
+        - name: producer
+          image: cloudson/producer:latest
+          env:
+            - name: NATS_URL
+              value: {{ .Values.nats.url }}
+            - name: NATS_SUBJECT:
+              value: {{ .Values.nats.subject }}
