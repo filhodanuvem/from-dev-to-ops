@@ -7,11 +7,11 @@ spec:
   interval: 1m
   chart:
     spec:
-      chart: s
+      chart: ../../../helm/producer/
       version: 0.9.2
       sourceRef: 
         kind: HelmRepository
-        path: ../../../helm/producer/
+        name: producer
         namespace: flux-system
       interval: 1m
   values:
