@@ -9,10 +9,10 @@ spec:
     spec:
       chart: ../../../helm/producer/
       version: 0.1.0
-      sourceRef: 
-        kind: GitRepository
-        name: producer
-        namespace: flux-system
+      # sourceRef: 
+      #   kind: GitRepository
+      #   name: producer
+      #   namespace: flux-system
       interval: 1m
   values:
     url: "nats://nats:4222"
