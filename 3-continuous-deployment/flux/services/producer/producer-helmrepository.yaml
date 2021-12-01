@@ -1,5 +1,5 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta1
-kind: HelmRepository
+kind: GitRepository
 metadata:
   name: producer
   namespace: flux-system
