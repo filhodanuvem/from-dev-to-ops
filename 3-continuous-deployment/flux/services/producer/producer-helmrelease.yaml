@@ -7,7 +7,7 @@ spec:
   interval: 1m
   chart:
     spec:
-      chart: producer
+      chart: ./3-continuous-deployment/helm/producer/
       version: 0.1.0
       sourceRef: 
         kind: GitRepository
