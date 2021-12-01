@@ -10,7 +10,7 @@ spec:
       chart: ./3-continuous-deployment/helm/producer/
       version: 0.1.0
       sourceRef: 
-        kind: GitRepository
+        kind: HelmRepository
         name: producer
         namespace: flux-system
       interval: 1m
