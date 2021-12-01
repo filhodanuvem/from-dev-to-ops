@@ -7,12 +7,12 @@ spec:
   interval: 1m
   chart:
     spec:
-      chart: ../../../helm/producer/
+      chart: producer
       version: 0.1.0
-      # sourceRef: 
-      #   kind: GitRepository
-      #   name: producer
-      #   namespace: flux-system
+      sourceRef: 
+        kind: GitRepository
+        name: producer
+        namespace: flux-system
       interval: 1m
   values:
     url: "nats://nats:4222"

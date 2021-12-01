@@ -1,0 +1,8 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: producer
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: https://github.com/filhodanuvem/from-dev-to-ops/tree/master/3-continuous-deployment/helm/producer
