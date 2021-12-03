@@ -7,7 +7,7 @@ spec:
   interval: 1m
   chart:
     spec:
-      chart: ./3-continuous-deployment/helm/producer/
+      chart: ./producer
       version: 0.1.0
       sourceRef: 
         kind: GitRepository
@@ -17,3 +17,4 @@ spec:
   values:
     url: "nats://nats:4222"
     subject: ""
+    replicaCount: 1
