@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: producer
+  name: payment-producer
   namespace: filhodanuvem-services
   labels:
-    app: producer
+    app: payment-producer
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: producer
+      app: payment-producer
   template:
     metadata:
       labels:
-        app: producer
+        app: payment-producer
     spec:
       containers:
-        - name: producer
+        - name: payment-producer
           image: cloudson/producer:latest
           env:
             - name: NATS_URL
