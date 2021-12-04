@@ -18,3 +18,14 @@ spec:
     nats: 
       jetstream:
         enabled: true
+
+        memStorage:
+          enabled: false
+          size: 2Gi
+
+        fileStorage:
+          enabled: true
+          size: 1Gi
+          storageDirectory: /data/
+          storageClassName: default
+
