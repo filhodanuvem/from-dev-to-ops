@@ -19,19 +19,24 @@ func main() {
 	}
 	defer sc.Close()
 
+	js, err := sc.JetStream()
+	if err != nil {
+		log.Fatalf("Couldn't connect to nats %s, err: %w", nats_url, err)
+	}
+
 	log.Println("Running crazy producer...")
 
 	messages := make(chan int)
-	go func(sc *nats.Conn) {
+	go func(js nats.JetStreamContext) {
 		for {
 			m := <-messages
-			if err := sc.Publish(nats_subject, []byte(string(m))); err != nil {
+			if _, err := js.Publish(nats_subject, []byte(string(m))); err != nil {
 				log.Printf("Error on publishing to nats: %w\n", err)
 			}
 
 			log.Println(m)
 		}
-	}(sc)
+	}(js)
 
 	for {
 		number := rand.Intn(100)
