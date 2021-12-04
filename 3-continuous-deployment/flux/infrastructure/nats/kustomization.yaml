@@ -1,5 +1,6 @@
 resources:
   - ./nats-helmrepository.yaml
+  - ./nack-helmrepository.yaml
   - ./nats-helmrelease.yaml
   - ./nack-helmrelease.yaml
   - ./streams.yaml
