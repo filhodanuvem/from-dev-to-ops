@@ -7,12 +7,12 @@ spec:
   interval: 1m
   chart:
     spec:
-      chart: ./3-continuous-deployment/helm
+      chart: ./3-continuous-deployment/helm/producer
       version: 0.1.0
       sourceRef: 
         kind: GitRepository
         name: producer
-        namespace: flux-system
+        namespace: filhodanuvem-services
       interval: 1m
   values:
     nats:
