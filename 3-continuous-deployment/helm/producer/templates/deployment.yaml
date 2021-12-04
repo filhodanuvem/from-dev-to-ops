@@ -21,5 +21,5 @@ spec:
           env:
             - name: NATS_URL
               value: {{ .Values.nats.url }}
-            - name: NATS_SUBJECTS
+            - name: NATS_SUBJECT
               value: {{ .Values.nats.subject }}
