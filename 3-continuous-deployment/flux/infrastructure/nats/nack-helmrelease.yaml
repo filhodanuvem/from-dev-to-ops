@@ -18,4 +18,4 @@ spec:
     jetstream:
       enabled: true
     nats: 
-      url: nats://nats-0.nats.filhodanuvem-services.svc.cluster.local:4222
+      url: "nats://nats-0.nats.filhodanuvem-services.svc.cluster.local:4222"
