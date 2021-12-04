@@ -17,5 +17,5 @@ spec:
   values:
     nats:
       url: "nats://nats:4222"
-      subject: ""
+      subject: "purchases"
     replicaCount: 1

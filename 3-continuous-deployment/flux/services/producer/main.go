@@ -13,7 +13,10 @@ var nats_url = os.Getenv("NATS_URL")
 var nats_subject = os.Getenv("NATS_SUBJECT")
 
 func main() {
-	sc, _ := nats.Connect(nats_url)
+	sc, err := nats.Connect(nats_url)
+	if err != nil {
+		log.Fatalf("Couldn't connect to nats %s, err: %w", nats_url, err)
+	}
 	defer sc.Close()
 
 	log.Println("Running crazy producer...")
@@ -22,7 +25,10 @@ func main() {
 	go func(sc *nats.Conn) {
 		for {
 			m := <-messages
-			sc.Publish(nats_subject, []byte(string(m)))
+			if err := sc.Publish(nats_subject, []byte(string(m))); err != nil {
+				log.Printf("Error on publishing to nats: %w\n", err)
+			}
+
 			log.Println(m)
 		}
 	}(sc)
