@@ -3,7 +3,7 @@ input:
   nats_jetstream:
     urls:
       - nats://nats-0.nats.filhodanuvem-services.svc.cluster.local:4222
-    subject: "purchases"
-    queue: "purchasesqueue"
-    durable: "purchasestream"
+    subject: "payment.orders"
+    queue: "paymentqueue"
+    durable: "paymentstream"
     deliver: all

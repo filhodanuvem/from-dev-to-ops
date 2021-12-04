@@ -1,0 +1,9 @@
+apiVersion: jetstream.nats.io/v1beta2
+kind: Stream
+metadata:
+  name: paymentstream
+spec:
+  name: paymentstream
+  subjects: ["payment.*"]
+  storage: memory
+  maxAge: 1h
