@@ -24,6 +24,7 @@ module "eks" {
   vpc_id          = module.vpc.vpc_id
   subnets         = module.vpc.public_subnets
 
+
   worker_groups = [
      {
       name                          = "worker-group-1"
