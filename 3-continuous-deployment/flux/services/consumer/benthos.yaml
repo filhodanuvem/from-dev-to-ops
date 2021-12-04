@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: benthos-consumer
+  name: payment-consumer
   namespace: filhodanuvem-services
   labels:
-    app: benthos-consumer
+    app: payment-consumer
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: benthos-consumer
+      app: payment-consumer
   template:
     metadata:
       labels:
-        app: benthos-consumer
+        app: payment-consumer
     spec:
       containers:
         - name: benthos
@@ -25,4 +25,4 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: benthos-consumer-config
+            name: payment-consumer-config
