@@ -4,6 +4,7 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/nats-io/nats.go"
@@ -30,7 +31,7 @@ func main() {
 	go func(js nats.JetStreamContext) {
 		for {
 			m := <-messages
-			if _, err := js.Publish(nats_subject, []byte(string(m))); err != nil {
+			if _, err := js.Publish(nats_subject, []byte(strconv.Itoa(m))); err != nil {
 				log.Printf("Error on publishing to nats: %w\n", err)
 			}
 
