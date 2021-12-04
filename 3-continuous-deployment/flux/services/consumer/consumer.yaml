@@ -25,4 +25,4 @@ spec:
       volumes:
         - name: config-volume
           configMap:
-            name: benthos-config
+            name: payment-consumer-config

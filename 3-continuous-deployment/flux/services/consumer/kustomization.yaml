@@ -1,9 +1,9 @@
 namespace: filhodanuvem-services
 
 configMapGenerator:
-- name: benthos-consumer-config
+- name: payment-consumer-config
   files:
-    - benthos-config.yaml
+    - consumer-config.yaml
 
 resources:
-  - ./benthos.yaml
+  - ./consumer.yaml
