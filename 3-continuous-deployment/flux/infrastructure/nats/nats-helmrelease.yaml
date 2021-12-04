@@ -28,4 +28,6 @@ spec:
           size: 1Gi
           storageDirectory: /data/
           storageClassName: default
+    reloader:
+      enabled: true
 
