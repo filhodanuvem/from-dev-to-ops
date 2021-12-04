@@ -29,5 +29,5 @@ spec:
           storageDirectory: /data/
           storageClassName: default
     reloader:
-      enabled: true
+      enabled: false
 
