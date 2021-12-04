@@ -2,3 +2,4 @@ resources:
   - ./nats-helmrepository.yaml
   - ./nats-helmrelease.yaml
   - ./nack-helmrelease.yaml
+  - ./streams.yaml
