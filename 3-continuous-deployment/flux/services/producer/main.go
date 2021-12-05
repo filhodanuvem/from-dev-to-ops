@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
+	"io"
 	"log"
 	"math/rand"
 	"os"
@@ -9,7 +11,15 @@ import (
 
 	"github.com/nats-io/nats.go"
 	uuid "github.com/satori/go.uuid"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
+	"go.opentelemetry.io/otel/sdk/resource"
+	"go.opentelemetry.io/otel/sdk/trace"
+	semconv "go.opentelemetry.io/otel/semconv/v1.7.0"
+	dtrace "go.opentelemetry.io/otel/trace"
 )
+
+const tracerName = "producer"
 
 var nats_url = os.Getenv("NATS_URL")
 var nats_subject = os.Getenv("NATS_SUBJECT")
@@ -33,9 +43,28 @@ func main() {
 
 	log.Println("Running crazy producer...")
 
+	exp, err := newExporter(os.Stdout)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	tp := trace.NewTracerProvider(
+		trace.WithBatcher(exp),
+		trace.WithResource(newResource()),
+	)
+	defer func() {
+		if err := tp.Shutdown(context.Background()); err != nil {
+			log.Fatal(err)
+		}
+	}()
+	otel.SetTracerProvider(tp)
+
 	numbers := make(chan int)
 	go func(js nats.JetStreamContext) {
 		for {
+			var span dtrace.Span
+			_, span = otel.Tracer(tracerName).Start(context.Background(), "Produce")
+
 			u1 := uuid.NewV4()
 			number := <-numbers
 			m := message{
@@ -48,14 +77,17 @@ func main() {
 			b, err := json.Marshal(m)
 			if err != nil {
 				log.Printf("Error on publishing to nats: %s\n", err)
+				span.End()
 				continue
 			}
 
 			if _, err := js.Publish(nats_subject, b); err != nil {
 				log.Printf("Error on publishing to nats: %s\n", err)
+				span.End()
 				continue
 			}
 
+			span.End()
 			log.Println(m)
 		}
 	}(js)
@@ -65,4 +97,26 @@ func main() {
 		numbers <- number
 		time.Sleep(3 * time.Second)
 	}
+}
+
+func newExporter(w io.Writer) (trace.SpanExporter, error) {
+	return stdouttrace.New(
+		stdouttrace.WithWriter(w),
+		// Use human-readable output.
+		stdouttrace.WithPrettyPrint(),
+		// Do not print timestamps for the demo.
+		stdouttrace.WithoutTimestamps(),
+	)
+}
+
+func newResource() *resource.Resource {
+	r, _ := resource.Merge(
+		resource.Default(),
+		resource.NewWithAttributes(
+			semconv.SchemaURL,
+			semconv.ServiceNameKey.String("PRODUCER"),
+			semconv.ServiceVersionKey.String("v0.1.0"),
+		),
+	)
+	return r
 }

@@ -3,4 +3,4 @@ resources:
   - ./infrastructure/nats
   - ./services/consumer
   - ./services/producer
-  - ../../4-tracing/flux/
+  - ../../4-telemetry/flux/
