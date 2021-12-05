@@ -27,6 +27,6 @@ spec:
           enabled: true
           size: 1Gi
           storageDirectory: /data/
-          storageClassName: default
+          storageClassName: gp2
     reloader:
       enabled: false
