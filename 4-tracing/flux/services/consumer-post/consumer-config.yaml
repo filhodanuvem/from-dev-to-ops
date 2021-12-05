@@ -10,7 +10,7 @@ input:
 output:
   label: "posting"
   http_client:
-    url: http://localhost:4195/post
+    url: http://api:8081/
     verb: POST
     headers:
       Content-Type: application/json
