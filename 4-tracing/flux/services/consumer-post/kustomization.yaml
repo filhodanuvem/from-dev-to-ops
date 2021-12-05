@@ -1,7 +1,7 @@
 namespace: filhodanuvem-services
 
 configMapGenerator:
-- name: payment-consumer-config
+- name: payment-consumer-post-config
   files:
     - consumer-config.yaml
 
