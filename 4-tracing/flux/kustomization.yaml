@@ -1,2 +1,3 @@
 resources:
   - ./services/consumer-post/
+  - ./services/api
