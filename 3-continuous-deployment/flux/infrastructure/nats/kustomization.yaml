@@ -1,6 +1,5 @@
 resources:
   - ./crds.yaml
-  - ./rbac.yaml
   - ./nats-helmrepository.yaml
   - ./nack-helmrepository.yaml
   - ./nats-helmrelease.yaml
