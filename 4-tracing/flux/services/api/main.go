@@ -15,5 +15,8 @@ func sendReceiptHandler(w http.ResponseWriter, req *http.Request) {
 func main() {
 	http.HandleFunc("/", sendReceiptHandler)
 
-	http.ListenAndServe(":8081", nil)
+	log.Println("Server running on 8081...")
+	if err := http.ListenAndServe(":8081", nil); err != nil {
+		panic(err)
+	}
 }
