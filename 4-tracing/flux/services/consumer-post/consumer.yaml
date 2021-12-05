@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-consumer-post
+  namespace: filhodanuvem-services
+  labels:
+    app: payment-consumer-post
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment-consumer-post
+  template:
+    metadata:
+      labels:
+        app: payment-consumer-post
+    spec:
+      containers:
+        - name: benthos
+          image: jeffail/benthos:latest
+          command: ["/benthos", "-c", "/etc/config/consumer-config.yaml"]
+          volumeMounts:
+          - name: config-volume
+            mountPath: /etc/config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: payment-consumer-post-config

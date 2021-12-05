@@ -1,5 +1,5 @@
 input:
-  label: ""
+  label: "consumer"
   nats_jetstream:
     urls:
       - nats://nats-0.nats.filhodanuvem-services.svc.cluster.local:4222
