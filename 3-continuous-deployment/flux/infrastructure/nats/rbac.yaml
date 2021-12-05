@@ -1,0 +1,59 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: jetstream-controller
+  namespace: filhodanuvem-services
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: jetstream-controller-cluster-role
+rules:
+- apiGroups:
+  - ''
+  resources:
+  - events
+  verbs:
+  - create
+  - update
+  - patch
+- apiGroups:
+  - ''
+  resources:
+  - secrets
+  verbs:
+  - get
+  - watch
+  - list
+- apiGroups:
+  - jetstream.nats.io
+  resources:
+  - streams
+  - streams/status
+  - consumers
+  - consumers/status
+  - streamtemplates
+  - streamtemplates/status
+  - accounts
+  verbs:
+  - create
+  - get
+  - list
+  - watch
+  - patch
+  - update
+  - delete
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: jetstream-controller-cluster-role-binding
+subjects:
+- kind: ServiceAccount
+  name: jetstream-controller
+  namespace: filhodanuvem-services
+roleRef:
+  kind: ClusterRole
+  name: jetstream-controller-cluster-role
+  apiGroup: rbac.authorization.k8s.io
