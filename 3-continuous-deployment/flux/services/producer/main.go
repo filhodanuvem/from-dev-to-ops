@@ -77,12 +77,14 @@ func main() {
 			b, err := json.Marshal(m)
 			if err != nil {
 				log.Printf("Error on publishing to nats: %s\n", err)
+				span.RecordError(err)
 				span.End()
 				continue
 			}
 
 			if _, err := js.Publish(nats_subject, b); err != nil {
 				log.Printf("Error on publishing to nats: %s\n", err)
+				span.RecordError(err)
 				span.End()
 				continue
 			}
