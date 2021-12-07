@@ -7,5 +7,5 @@ entries:
   description: A Helm chart for producer
   keywords: []
   maintainers: []
-  name: producer
+  name: payment-producer
 generated: "2021-12-01T22:30:01.824606Z"

@@ -1,3 +1,4 @@
 resources:
+  - ./infrastructure
   - ./services/consumer-post/
   - ./services/api

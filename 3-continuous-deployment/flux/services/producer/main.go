@@ -12,6 +12,7 @@ import (
 	"github.com/nats-io/nats.go"
 	uuid "github.com/satori/go.uuid"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
@@ -89,6 +90,7 @@ func main() {
 				continue
 			}
 
+			span.SetAttributes(attribute.Int("number", m.Number))
 			span.End()
 			log.Println(m)
 		}
