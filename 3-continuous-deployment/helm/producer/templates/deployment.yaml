@@ -5,6 +5,10 @@ metadata:
   namespace: filhodanuvem-services
   labels:
     app: payment-producer
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
+    prometheus.io/path: /metrics
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:

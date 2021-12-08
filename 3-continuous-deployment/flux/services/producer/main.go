@@ -3,9 +3,10 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"io"
+	"fmt"
 	"log"
 	"math/rand"
+	"net/http"
 	"os"
 	"time"
 
@@ -13,10 +14,13 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
-	"go.opentelemetry.io/otel/sdk/resource"
-	"go.opentelemetry.io/otel/sdk/trace"
-	semconv "go.opentelemetry.io/otel/semconv/v1.7.0"
+	"go.opentelemetry.io/otel/exporters/prometheus"
+	"go.opentelemetry.io/otel/metric/global"
+	"go.opentelemetry.io/otel/sdk/export/metric/aggregation"
+	"go.opentelemetry.io/otel/sdk/metric/aggregator/histogram"
+	controller "go.opentelemetry.io/otel/sdk/metric/controller/basic"
+	processor "go.opentelemetry.io/otel/sdk/metric/processor/basic"
+	selector "go.opentelemetry.io/otel/sdk/metric/selector/simple"
 	dtrace "go.opentelemetry.io/otel/trace"
 )
 
@@ -44,21 +48,7 @@ func main() {
 
 	log.Println("Running crazy producer...")
 
-	exp, err := newExporter(os.Stdout)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	tp := trace.NewTracerProvider(
-		trace.WithBatcher(exp),
-		trace.WithResource(newResource()),
-	)
-	defer func() {
-		if err := tp.Shutdown(context.Background()); err != nil {
-			log.Fatal(err)
-		}
-	}()
-	otel.SetTracerProvider(tp)
+	initMeter()
 
 	numbers := make(chan int)
 	go func(js nats.JetStreamContext) {
@@ -103,24 +93,27 @@ func main() {
 	}
 }
 
-func newExporter(w io.Writer) (trace.SpanExporter, error) {
-	return stdouttrace.New(
-		stdouttrace.WithWriter(w),
-		// Use human-readable output.
-		stdouttrace.WithPrettyPrint(),
-		// Do not print timestamps for the demo.
-		stdouttrace.WithoutTimestamps(),
-	)
-}
-
-func newResource() *resource.Resource {
-	r, _ := resource.Merge(
-		resource.Default(),
-		resource.NewWithAttributes(
-			semconv.SchemaURL,
-			semconv.ServiceNameKey.String("PRODUCER"),
-			semconv.ServiceVersionKey.String("v0.1.0"),
+func initMeter() {
+	config := prometheus.Config{}
+	c := controller.New(
+		processor.NewFactory(
+			selector.NewWithHistogramDistribution(
+				histogram.WithExplicitBoundaries(config.DefaultHistogramBoundaries),
+			),
+			aggregation.CumulativeTemporalitySelector(),
+			processor.WithMemory(true),
 		),
 	)
-	return r
+	exporter, err := prometheus.New(config, c)
+	if err != nil {
+		log.Panicf("failed to initialize prometheus exporter %v", err)
+	}
+	global.SetMeterProvider(exporter.MeterProvider())
+
+	http.HandleFunc("/metrics", exporter.ServeHTTP)
+	go func() {
+		_ = http.ListenAndServe(":2222", nil)
+	}()
+
+	fmt.Println("Prometheus server running on :2222")
 }
