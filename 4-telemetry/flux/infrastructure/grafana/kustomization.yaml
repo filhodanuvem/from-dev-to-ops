@@ -1,0 +1,3 @@
+resources:
+- grafana-helmrepo.yaml
+- grafana-helmrelease.yaml
