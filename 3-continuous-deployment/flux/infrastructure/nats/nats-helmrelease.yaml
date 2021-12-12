@@ -20,11 +20,11 @@ spec:
         enabled: true
 
         memStorage:
-          enabled: false
+          enabled: true
           size: 2Gi
 
         fileStorage:
-          enabled: true
+          enabled: false
           size: 1Gi
           storageDirectory: /data/
           storageClassName: gp2
