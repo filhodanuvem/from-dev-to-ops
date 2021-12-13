@@ -1,3 +1,8 @@
 resources:
   - grafana-helmrepo.yaml
   - grafana-helmrelease.yaml
+
+configMapGenerator:
+  - name: dashboard-config
+    files:
+      - dashboard-configmap.yaml
