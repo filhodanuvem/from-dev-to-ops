@@ -1,3 +1,5 @@
+namespace: filhodanuvem-services
+
 resources:
   - grafana-helmrepo.yaml
   - grafana-helmrelease.yaml
@@ -5,4 +7,6 @@ resources:
 configMapGenerator:
   - name: dashboard-config
     files:
-      - dashboard-configmap.yaml
+      - dashboard-configmap.json
+    options:
+      disableNameSuffixHash: true

@@ -27,6 +27,5 @@ spec:
           enabled: true
           size: 1Gi
           storageDirectory: /data/
-          storageClassName: local
     reloader:
       enabled: false

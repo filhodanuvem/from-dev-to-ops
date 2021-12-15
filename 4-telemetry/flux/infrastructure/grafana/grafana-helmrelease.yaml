@@ -24,10 +24,9 @@ spec:
            url: http://prometheus-server
            access: proxy
            isDefault: true
-    dashboards:
-      default:
-        main-dashboard:
-          file: dashboards/dashboard.json
+    sidecar:
+      dashboards:
+        enabled: true
     dashboardsConfigMaps:
-      - dashboard-config
+      default: dashboard-config
     
