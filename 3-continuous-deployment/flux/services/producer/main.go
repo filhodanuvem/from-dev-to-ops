@@ -22,7 +22,7 @@ var nats_url = os.Getenv("NATS_URL")
 var nats_subject = os.Getenv("NATS_SUBJECT")
 
 type message struct {
-	Number  int               `json:"number"`
+	Amount  int               `json:"amount"`
 	Headers map[string]string `json:"headers"`
 }
 
@@ -41,7 +41,7 @@ func main() {
 	opsProcessed := promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "producer_produced_events_count",
 		Help: "The total number of produced events",
-	}, []string{"number"})
+	}, []string{"amount"})
 
 	js, err := sc.JetStream()
 	if err != nil {
@@ -54,9 +54,9 @@ func main() {
 	go func(js nats.JetStreamContext) {
 		for {
 			u1 := uuid.NewV4()
-			number := <-numbers
+			amount := <-numbers
 			m := message{
-				Number: number,
+				Amount: amount,
 				Headers: map[string]string{
 					"x-trace-id": u1.String(),
 				},
@@ -73,7 +73,7 @@ func main() {
 				continue
 			}
 
-			go opsProcessed.With(prometheus.Labels{"number": strconv.Itoa(m.Number)}).Inc()
+			go opsProcessed.With(prometheus.Labels{"amount": strconv.Itoa(m.Amount)}).Inc()
 			log.Println(m)
 		}
 	}(js)

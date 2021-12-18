@@ -8,7 +8,7 @@ import (
 )
 
 type requestBody struct {
-	Number  int               `json:"number"`
+	Amount  int               `json:"amount"`
 	Headers map[string]string `json:"headers"`
 }
 
@@ -20,7 +20,7 @@ func sendReceiptHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	log.Printf("Number=%d TraceID=%s\n", request.Number, request.Headers["x-trace-id"])
+	log.Printf("Amount=%d TraceID=%s\n", request.Amount, request.Headers["x-trace-id"])
 }
 
 func main() {
