@@ -17,6 +17,7 @@ import (
 )
 
 const tracerName = "producer"
+const eventType = "PAYMENT_ORDER_CREATED"
 
 var nats_url = os.Getenv("NATS_URL")
 var nats_subject = os.Getenv("NATS_SUBJECT")
@@ -38,10 +39,10 @@ func main() {
 		http.ListenAndServe(":2222", nil)
 	}()
 
-	opsProcessed := promauto.NewCounterVec(prometheus.CounterOpts{
-		Name: "producer_produced_events_count",
-		Help: "The total number of produced events",
-	}, []string{"amount"})
+	metric := promauto.NewSummaryVec(prometheus.SummaryOpts{
+		Name: "payment_order_created",
+		Help: "Order created",
+	}, []string{"amount", "x_trace_id", "event_type"})
 
 	js, err := sc.JetStream()
 	if err != nil {
@@ -73,7 +74,15 @@ func main() {
 				continue
 			}
 
-			go opsProcessed.With(prometheus.Labels{"amount": strconv.Itoa(m.Amount)}).Inc()
+			labels := prometheus.Labels{
+				"amount":     strconv.Itoa(m.Amount),
+				"x_trace_id": m.Headers["x-trace-id"],
+				"event_type": eventType,
+			}
+
+			timer := prometheus.NewTimer(metric.With(labels))
+			timer.ObserveDuration()
+
 			log.Println(m)
 		}
 	}(js)

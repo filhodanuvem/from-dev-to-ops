@@ -4,6 +4,8 @@ configMapGenerator:
 - name: payment-consumer-post-config
   files:
     - consumer-config.yaml
+  options:
+      disableNameSuffixHash: true
 
 resources:
   - ./consumer.yaml

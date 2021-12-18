@@ -22,3 +22,18 @@ output:
       byte_size: 0
       period: ""
       check: ""
+pipeline:
+  processors:
+    - for_each:
+      - log:
+          level: INFO
+          fields:
+            amount: ${! json("amount") }
+            x_trace_id: ${! json("headers['x-trace-id']") }
+logger:
+  prefix: benthos
+  level: DEBUG
+  format: json
+  add_timestamp: true
+  static_fields:
+    '@service': benthos

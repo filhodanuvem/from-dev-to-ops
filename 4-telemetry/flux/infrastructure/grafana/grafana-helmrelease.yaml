@@ -17,6 +17,9 @@ spec:
   values:
     adminUser: admin
     adminPassword: admin
+    service:
+      enabled: true
+      type: LoadBalancer
     datasources:
        datasources.yaml:
          apiVersion: 1

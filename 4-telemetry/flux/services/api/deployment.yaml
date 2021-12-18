@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api
+  name: payment-api
   namespace: filhodanuvem-services
   labels:
-    app: api
+    app: payment-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api
+      app: payment-api
   template:
     metadata:
       labels:
-        app: api
+        app: payment-api
     spec:
       containers:
       - name: api
