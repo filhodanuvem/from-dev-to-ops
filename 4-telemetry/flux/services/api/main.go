@@ -30,7 +30,6 @@ type requestBody struct {
 }
 
 func paymentHandler(w http.ResponseWriter, req *http.Request) {
-	log.Printf("Received request")
 	body, _ := ioutil.ReadAll(req.Body)
 	var request requestBody
 	if err := json.Unmarshal(body, &request); err != nil {
