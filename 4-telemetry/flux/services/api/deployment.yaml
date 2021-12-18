@@ -14,6 +14,10 @@ spec:
     metadata:
       labels:
         app: payment-api
+      annotations:
+          prometheus.io/scrape: "true"
+          prometheus.io/port: "2222"
+          prometheus.io/path: /metrics
     spec:
       containers:
       - name: api

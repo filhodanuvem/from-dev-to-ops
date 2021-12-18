@@ -9,6 +9,7 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 const successEventType = "PAYMENT_ORDER_SUCCEEDED"
@@ -60,8 +61,12 @@ func paymentHandler(w http.ResponseWriter, req *http.Request) {
 
 func main() {
 
-	http.HandleFunc("/", paymentHandler)
+	go func() {
+		http.Handle("/metrics", promhttp.Handler())
+		http.ListenAndServe(":2222", nil)
+	}()
 
+	http.HandleFunc("/", paymentHandler)
 	log.Println("Server running on 8081...")
 	if err := http.ListenAndServe(":8081", nil); err != nil {
 		panic(err)
