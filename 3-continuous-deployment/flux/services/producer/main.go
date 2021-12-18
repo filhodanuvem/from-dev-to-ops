@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/nats-io/nats.go"
@@ -37,10 +38,10 @@ func main() {
 		http.ListenAndServe(":2222", nil)
 	}()
 
-	opsProcessed := promauto.NewCounter(prometheus.CounterOpts{
+	opsProcessed := promauto.NewCounterVec(prometheus.CounterOpts{
 		Name: "producer_produced_events_count",
 		Help: "The total number of produced events",
-	})
+	}, []string{"number"})
 
 	js, err := sc.JetStream()
 	if err != nil {
@@ -72,7 +73,7 @@ func main() {
 				continue
 			}
 
-			go opsProcessed.Inc()
+			go opsProcessed.With(prometheus.Labels{"number": strconv.Itoa(m.Number)}).Inc()
 			log.Println(m)
 		}
 	}(js)
