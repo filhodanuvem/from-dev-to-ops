@@ -1,16 +1,21 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/filhodanuvem/log-api/metric"
+	tracex "github.com/filhodanuvem/log-api/trace"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/sdk/trace"
 )
 
 const successEventType = "PAYMENT_ORDER_SUCCEEDED"
@@ -60,6 +65,25 @@ func paymentHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+	f, err := os.Create("traces.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+	exp, err := tracex.NewExporter(f)
+	if err != nil {
+		log.Fatal(err)
+	}
+	tp := trace.NewTracerProvider(
+		trace.WithBatcher(exp),
+		trace.WithResource(trace.NewResource()),
+	)
+	defer func() {
+		if err := tp.Shutdown(context.Background()); err != nil {
+			log.Fatal(err)
+		}
+	}()
+	otel.SetTracerProvider(tp)
 
 	go func() {
 		http.Handle("/metrics", promhttp.Handler())

@@ -23,16 +23,18 @@ const eventType = "PAYMENT_ORDER_CREATED"
 var nats_url = os.Getenv("NATS_URL")
 var nats_subject = os.Getenv("NATS_SUBJECT")
 
-var bmetric := promauto.NewSummaryVec(prometheus.SummaryOpts{
-	Name: "payment_order_created",
-	Help: "Order created",
+var bmetric = promauto.NewHistogramVec(prometheus.HistogramOpts{
+	Name: "payment_order_time_in_seconds",
+	Help: "Duration time of an order creation",
 }, metric.Labels)
+
 type message struct {
 	Amount  int               `json:"amount"`
 	Headers map[string]string `json:"headers"`
 }
 
 func main() {
+	prometheus.Register(bmetric)
 	sc, err := nats.Connect(nats_url)
 	if err != nil {
 		log.Fatalf("Couldn't connect to nats %s, err: %s", nats_url, err)
@@ -63,6 +65,13 @@ func main() {
 				},
 			}
 
+			labels := metric.NewLabels(
+				strconv.Itoa(m.Amount),
+				m.Headers["x-trace-id"],
+				eventType,
+			)
+			recorder := metric.NewRecorder().WithTimer(bmetric, labels)
+
 			b, err := json.Marshal(m)
 			if err != nil {
 				log.Printf("Error on publishing to nats: %s\n", err)
@@ -74,12 +83,7 @@ func main() {
 				continue
 			}
 
-			labels := metric.NewLabels(
-				strconv.Itoa(m.Amount),
-				m.Headers["x-trace-id"],
-				eventType,
-			)
-			metric.Record(bmetric, labels)
+			recorder.RecordDuration()
 
 			log.Println(m)
 		}

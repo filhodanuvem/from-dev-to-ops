@@ -1,0 +1,3 @@
+resources:
+  - "./elasticsearch-helmrepo.yaml"
+  - "./elasticsearch-helmrelease.yaml"
