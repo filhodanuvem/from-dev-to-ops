@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/filhodanuvem/producer/metric"
 	"github.com/nats-io/nats.go"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
@@ -39,10 +40,10 @@ func main() {
 		http.ListenAndServe(":2222", nil)
 	}()
 
-	metric := promauto.NewSummaryVec(prometheus.SummaryOpts{
+	bmetric := promauto.NewSummaryVec(prometheus.SummaryOpts{
 		Name: "payment_order_created",
 		Help: "Order created",
-	}, []string{"amount", "x_trace_id", "event_type"})
+	}, metric.Labels)
 
 	js, err := sc.JetStream()
 	if err != nil {
@@ -74,14 +75,12 @@ func main() {
 				continue
 			}
 
-			labels := prometheus.Labels{
-				"amount":     strconv.Itoa(m.Amount),
-				"x_trace_id": m.Headers["x-trace-id"],
-				"event_type": eventType,
-			}
-
-			timer := prometheus.NewTimer(metric.With(labels))
-			timer.ObserveDuration()
+			labels := metric.NewLabels(
+				strconv.Itoa(m.Amount),
+				m.Headers["x-trace-id"],
+				eventType,
+			)
+			metric.Record(bmetric, labels)
 
 			log.Println(m)
 		}
