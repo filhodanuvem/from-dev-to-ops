@@ -19,11 +19,11 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v2.4.0
 
-    - run: terraform init
+    - run: terraform init -backend-config=./backends/cloud.tf
 
     - name: Terraform Plan
       id: plan
-      run: terraform plan -no-color
+      run: terraform plan -no-color -backend-config=./backends/cloud.tf
       continue-on-error: true
     
     - name: Update Pull Request
