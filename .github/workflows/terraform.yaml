@@ -19,6 +19,8 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v2.4.0
 
+    - run: terraform init
+    
     - name: Terraform Plan
       id: plan
       run: terraform plan
