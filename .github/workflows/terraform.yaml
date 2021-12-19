@@ -19,7 +19,7 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v2.4.0
 
-    - run: terraform init -backend-config=./backends/cloud.tf
+    - run: terraform init -backend-config=./backends/config.cloud.tfbackend
 
     - name: Terraform Plan
       id: plan
