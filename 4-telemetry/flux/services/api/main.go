@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/filhodanuvem/log-api/metric"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -38,23 +39,22 @@ func paymentHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	labels := prometheus.Labels{
-		"amount":     strconv.Itoa(request.Amount),
-		"x_trace_id": request.Headers["x-trace-id"],
-		"event_type": successEventType,
-	}
-
 	status := "success"
-	metric := successMetric
+	bmetric := successMetric
+	eventType := successEventType
 	if request.Amount%3 == 0 {
-		labels["event_type"] = failureEventType
-		metric = failMetric
+		eventType = failureEventType
+		bmetric = failMetric
 		status = "fail"
 	}
 
-	metric.With(labels)
-	timer := prometheus.NewTimer(metric.With(labels))
-	timer.ObserveDuration()
+	labels := metric.NewLabels(
+		strconv.Itoa(request.Amount),
+		request.Headers["x-trace-id"],
+		eventType,
+	)
+
+	metric.Record(bmetric, labels)
 
 	log.Printf("status=%s, Amount=%d TraceID=%s\n", status, request.Amount, request.Headers["x-trace-id"])
 }

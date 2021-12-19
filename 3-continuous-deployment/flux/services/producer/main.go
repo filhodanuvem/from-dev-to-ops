@@ -23,6 +23,10 @@ const eventType = "PAYMENT_ORDER_CREATED"
 var nats_url = os.Getenv("NATS_URL")
 var nats_subject = os.Getenv("NATS_SUBJECT")
 
+var bmetric := promauto.NewSummaryVec(prometheus.SummaryOpts{
+	Name: "payment_order_created",
+	Help: "Order created",
+}, metric.Labels)
 type message struct {
 	Amount  int               `json:"amount"`
 	Headers map[string]string `json:"headers"`
@@ -39,11 +43,6 @@ func main() {
 		http.Handle("/metrics", promhttp.Handler())
 		http.ListenAndServe(":2222", nil)
 	}()
-
-	bmetric := promauto.NewSummaryVec(prometheus.SummaryOpts{
-		Name: "payment_order_created",
-		Help: "Order created",
-	}, metric.Labels)
 
 	js, err := sc.JetStream()
 	if err != nil {
