@@ -3,6 +3,10 @@ name: 'Terraform'
 on:
   pull_request:
 
+defaults:
+  run:
+    working-directory: 2-kubernetes-cluster/tf
+
 jobs:
   Terraform:
     name: "Terraform"
@@ -14,8 +18,6 @@ jobs:
    
     - name: Check out code
       uses: actions/checkout@v2.4.0
-    
-    - run: cd 2-kubernetes-cluster/tf
 
     - name: Terraform Plan
       id: plan
