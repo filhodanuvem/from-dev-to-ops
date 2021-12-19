@@ -23,7 +23,7 @@ jobs:
 
     - name: Terraform Plan
       id: plan
-      run: terraform plan -no-color -backend-config=./backends/cloud.tf
+      run: terraform plan -no-color
       continue-on-error: true
     
     - name: Update Pull Request
