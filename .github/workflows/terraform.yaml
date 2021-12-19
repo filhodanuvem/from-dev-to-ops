@@ -42,7 +42,7 @@ jobs:
           <details><summary>Show Plan</summary>
 
           \`\`\`\n
-          ${process.env.PLAN:0:65000}
+          ${process.env.PLAN::10000}
           \`\`\`
 
           </details>
