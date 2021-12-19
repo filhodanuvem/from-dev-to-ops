@@ -12,6 +12,8 @@ jobs:
       with:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
     
+    - run: cd 2-kubernetes-cluster/tf
+
     - name: Terraform Plan
       id: plan
       run: terraform plan
