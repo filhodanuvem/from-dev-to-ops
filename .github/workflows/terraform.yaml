@@ -33,14 +33,14 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
-          const planOutput = `${{ steps.plan.outputs.values().join('\n') }}` }}``
+          const planOutput = `${{ steps.plan.outputs }}` }}``
           const output = `#### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
           #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
           
           <details><summary>Show Plan</summary>
 
           \`\`\`\n
-          ${planOutput}"
+          ${planOutput.values().join('\n')}"
           \`\`\`
 
           </details>
