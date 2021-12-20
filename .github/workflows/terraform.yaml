@@ -40,7 +40,7 @@ jobs:
           <details><summary>Show Plan</summary>
 
           \`\`\`\n
-          ${planOutput.substring(0, 20000)}"
+          ${planOutput.substr(0, 20000)}"
           \`\`\`
 
           </details>
