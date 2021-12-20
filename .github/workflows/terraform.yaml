@@ -39,7 +39,7 @@ jobs:
           <details><summary>Show Plan</summary>
 
           \`\`\`\n
-          ${{ steps.plan.outputs.substr(0, 20000) }}"
+          ${{ steps.plan.outputs.substring(0, 20000) }}"
           \`\`\`
 
           </details>
