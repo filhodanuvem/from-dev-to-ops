@@ -15,6 +15,16 @@ spec:
         namespace: flux-system
       interval: 1m
   values:
+    provisionDataStore:
+      cassandra: false
+      elasticsearch: true
+      kafka: false
     storage:
       type: elasticsearch
+    elasticsearch:
+      scheme: http
+      host: elasticsearch
+      port: 9200
+      user: elastic
+      usePassword: true
       
