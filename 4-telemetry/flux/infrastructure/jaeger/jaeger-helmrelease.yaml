@@ -26,5 +26,5 @@ spec:
       host: elasticsearch
       port: 9200
       user: elastic
-      usePassword: true
+      usePassword: false
       

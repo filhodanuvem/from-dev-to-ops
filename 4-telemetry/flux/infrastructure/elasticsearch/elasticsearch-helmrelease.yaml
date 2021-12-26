@@ -19,6 +19,8 @@ spec:
       replicas: 1
     client:
       replicas: 1
+      env:
+        MINIMUM_MASTER_NODES: 1
     master:
       replicas: 1
     initResources:
