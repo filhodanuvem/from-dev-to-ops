@@ -7,7 +7,7 @@ spec:
   interval: 1m
   chart:
     spec:
-      chart: stable/elasticsearch
+      chart: elasticsearch
       version: 1.32.5
       sourceRef:
         kind: HelmRepository
@@ -15,12 +15,23 @@ spec:
         namespace: flux-system
       interval: 1m
   values:
-    provisionDataStore:
-      cassandra: false
-      elasticsearch: true
-      kafka: false
-    storage:
-      type: elasticsearch
-    elasticsearch:
-      host: elasticsearch
-      
+    data:
+      replicas: 1
+    client:
+      replicas: 1
+    master:
+      replicas: 1
+    initResources:
+      limits:
+        cpu: "25m"
+        memory: "128Mi"
+      requests:
+        cpu: "25m"
+        memory: "128Mi"
+    resources:
+      limits:
+        cpu: "1"
+        memory: "1024Mi"
+      requests:
+        cpu: "25m"
+        memory: "512Mi"
