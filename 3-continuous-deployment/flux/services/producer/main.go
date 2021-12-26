@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 	"math/rand"
@@ -10,11 +11,14 @@ import (
 	"time"
 
 	"github.com/filhodanuvem/producer/metric"
+	tracex "github.com/filhodanuvem/producer/trace"
 	"github.com/nats-io/nats.go"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	uuid "github.com/satori/go.uuid"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 )
 
 const tracerName = "producer"
@@ -29,12 +33,25 @@ var bmetric = promauto.NewHistogramVec(prometheus.HistogramOpts{
 }, metric.Labels)
 
 type message struct {
-	Amount  int               `json:"amount"`
-	Headers map[string]string `json:"headers"`
+	Amount    int               `json:"amount"`
+	PaymentID string            `json:"payment_id"`
+	Headers   map[string]string `json:"headers"`
 }
 
 func main() {
 	prometheus.Register(bmetric)
+	tp, err := tracex.NewProvider("http://jaeger-collector:14268/api/traces")
+	if err != nil {
+		log.Fatal(err)
+	}
+	ctx := context.Background()
+	defer func(ctx context.Context) {
+		if err := tp.Shutdown(ctx); err != nil {
+			log.Fatal(err)
+		}
+	}(ctx)
+	otel.SetTracerProvider(tp)
+
 	sc, err := nats.Connect(nats_url)
 	if err != nil {
 		log.Fatalf("Couldn't connect to nats %s, err: %s", nats_url, err)
@@ -56,36 +73,8 @@ func main() {
 	numbers := make(chan int)
 	go func(js nats.JetStreamContext) {
 		for {
-			u1 := uuid.NewV4()
 			amount := <-numbers
-			m := message{
-				Amount: amount,
-				Headers: map[string]string{
-					"x-trace-id": u1.String(),
-				},
-			}
-
-			labels := metric.NewLabels(
-				strconv.Itoa(m.Amount),
-				m.Headers["x-trace-id"],
-				eventType,
-			)
-			recorder := metric.NewRecorder().WithTimer(bmetric, labels)
-
-			b, err := json.Marshal(m)
-			if err != nil {
-				log.Printf("Error on publishing to nats: %s\n", err)
-				continue
-			}
-
-			if _, err := js.Publish(nats_subject, b); err != nil {
-				log.Printf("Error on publishing to nats: %s\n", err)
-				continue
-			}
-
-			recorder.RecordDuration()
-
-			log.Println(m)
+			publishPayment(ctx, js, amount)
 		}
 	}(js)
 
@@ -94,4 +83,41 @@ func main() {
 		numbers <- number
 		time.Sleep(3 * time.Second)
 	}
+}
+
+func publishPayment(ctx context.Context, js nats.JetStreamContext, amount int) {
+	ctx, span := otel.Tracer(tracex.ServiceName).Start(ctx, "Run")
+	defer span.End()
+
+	u1 := uuid.NewV4()
+	m := message{
+		Amount:    amount,
+		PaymentID: u1.String(),
+		Headers:   map[string]string{},
+	}
+	span.SetAttributes(
+		attribute.Key("payment-id").String(m.PaymentID),
+	)
+
+	labels := metric.NewLabels(
+		strconv.Itoa(m.Amount),
+		m.Headers["x-trace-id"],
+		eventType,
+	)
+	recorder := metric.NewRecorder().WithTimer(bmetric, labels)
+
+	b, err := json.Marshal(m)
+	if err != nil {
+		log.Printf("Error on publishing to nats: %s\n", err)
+		return
+	}
+
+	if _, err := js.Publish(nats_subject, b); err != nil {
+		log.Printf("Error on publishing to nats: %s\n", err)
+		return
+	}
+
+	recorder.RecordDuration()
+
+	log.Println(m)
 }

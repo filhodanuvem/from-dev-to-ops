@@ -8,7 +8,7 @@ import (
 )
 
 // newExporter returns a console exporter.
-const ServiceName = "payment-api"
+const ServiceName = "payment-producer"
 
 func NewProvider(url string) (*trace.TracerProvider, error) {
 	// Create the Jaeger exporter

@@ -15,9 +15,9 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/sdk/trace"
 )
 
+const serviceName = "payment-api"
 const successEventType = "PAYMENT_ORDER_SUCCEEDED"
 const failureEventType = "PAYMENT_ORDER_FAILED"
 
@@ -32,14 +32,19 @@ var failMetric = promauto.NewSummaryVec(prometheus.SummaryOpts{
 }, []string{"amount", "x_trace_id", "event_type"})
 
 type requestBody struct {
-	Amount  int               `json:"amount"`
-	Headers map[string]string `json:"headers"`
+	Amount    int               `json:"amount"`
+	PaymentID string            `json:"payment_id"`
+	Headers   map[string]string `json:"headers"`
 }
 
 func paymentHandler(w http.ResponseWriter, req *http.Request) {
+	ctx := context.Background()
+	ctx, span := otel.Tracer(tracex.ServiceName).Start(ctx, "Run")
+	defer span.End()
 	body, _ := ioutil.ReadAll(req.Body)
 	var request requestBody
 	if err := json.Unmarshal(body, &request); err != nil {
+		span.RecordError(err)
 		log.Printf("failed to unmarshal %s\n", body)
 		return
 	}
@@ -70,19 +75,17 @@ func main() {
 		log.Fatal(err)
 	}
 	defer f.Close()
-	exp, err := tracex.NewExporter(f)
+	tp, err := tracex.NewProvider("http://jaeger-collector:14268/api/traces")
 	if err != nil {
 		log.Fatal(err)
 	}
-	tp := trace.NewTracerProvider(
-		trace.WithBatcher(exp),
-		trace.WithResource(trace.NewResource()),
-	)
-	defer func() {
-		if err := tp.Shutdown(context.Background()); err != nil {
+
+	ctx := context.Background()
+	defer func(ctx context.Context) {
+		if err := tp.Shutdown(ctx); err != nil {
 			log.Fatal(err)
 		}
-	}()
+	}(ctx)
 	otel.SetTracerProvider(tp)
 
 	go func() {

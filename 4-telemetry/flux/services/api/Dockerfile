@@ -2,6 +2,7 @@ FROM golang:1.17-alpine AS build
 
 WORKDIR /gowork
 ADD . .
+RUN go get
 RUN go build main.go
 
 
