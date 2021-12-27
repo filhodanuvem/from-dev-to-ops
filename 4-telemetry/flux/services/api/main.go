@@ -15,12 +15,14 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/propagation"
 )
 
 const serviceName = "payment-api"
 const successEventType = "PAYMENT_ORDER_SUCCEEDED"
 const failureEventType = "PAYMENT_ORDER_FAILED"
 
+var prop = propagation.TraceContext{}
 var successMetric = promauto.NewSummaryVec(prometheus.SummaryOpts{
 	Name: "payment_order_completed",
 	Help: "Order completed",
@@ -38,7 +40,9 @@ type requestBody struct {
 }
 
 func paymentHandler(w http.ResponseWriter, req *http.Request) {
+	log.Println(req.Header)
 	ctx := context.Background()
+	ctx = prop.Extract(ctx, propagation.HeaderCarrier(req.Header))
 	ctx, span := otel.Tracer(tracex.ServiceName).Start(ctx, "Run")
 	defer span.End()
 	body, _ := ioutil.ReadAll(req.Body)
@@ -66,7 +70,7 @@ func paymentHandler(w http.ResponseWriter, req *http.Request) {
 
 	metric.Record(bmetric, labels)
 
-	log.Printf("status=%s, Amount=%d TraceID=%s\n", status, request.Amount, request.Headers["x-trace-id"])
+	log.Printf("status=%s, Amount=%d Headers=%s\n", status, request.Amount, req.Header["traceparent"])
 }
 
 func main() {

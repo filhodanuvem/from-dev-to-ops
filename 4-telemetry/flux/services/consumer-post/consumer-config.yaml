@@ -14,6 +14,7 @@ output:
     verb: POST
     headers:
       Content-Type: application/json
+      Traceparent: ${! json("headers.traceparent") }
     rate_limit: ""
     timeout: 5s
     max_in_flight: 1
@@ -29,7 +30,7 @@ pipeline:
           level: INFO
           fields:
             amount: ${! json("amount") }
-            x_trace_id: ${! json("headers['x-trace-id']") }
+            headers: ${! json("headers") }
 logger:
   prefix: benthos
   level: DEBUG

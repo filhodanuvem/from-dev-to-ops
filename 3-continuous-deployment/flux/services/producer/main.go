@@ -19,6 +19,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/propagation"
 )
 
 const tracerName = "producer"
@@ -26,6 +27,7 @@ const eventType = "PAYMENT_ORDER_CREATED"
 
 var nats_url = os.Getenv("NATS_URL")
 var nats_subject = os.Getenv("NATS_SUBJECT")
+var prop = propagation.TraceContext{}
 
 var bmetric = promauto.NewHistogramVec(prometheus.HistogramOpts{
 	Name: "payment_order_time_in_seconds",
@@ -86,15 +88,17 @@ func main() {
 }
 
 func publishPayment(ctx context.Context, js nats.JetStreamContext, amount int) {
-	ctx, span := otel.Tracer(tracex.ServiceName).Start(ctx, "Run")
-	defer span.End()
-
 	u1 := uuid.NewV4()
 	m := message{
 		Amount:    amount,
 		PaymentID: u1.String(),
 		Headers:   map[string]string{},
 	}
+
+	ctx, span := otel.Tracer(tracex.ServiceName).Start(ctx, "Run")
+	defer span.End()
+
+	prop.Inject(ctx, propagation.MapCarrier(m.Headers))
 	span.SetAttributes(
 		attribute.Key("payment-id").String(m.PaymentID),
 	)
