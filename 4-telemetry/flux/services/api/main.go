@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 
 	"github.com/filhodanuvem/log-api/metric"
@@ -74,11 +73,6 @@ func paymentHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-	f, err := os.Create("traces.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
 	tp, err := tracex.NewProvider("http://jaeger-collector:14268/api/traces")
 	if err != nil {
 		log.Fatal(err)

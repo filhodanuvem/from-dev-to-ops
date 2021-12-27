@@ -38,9 +38,9 @@ logger:
   add_timestamp: true
   static_fields:
     '@service': benthos
-# tracer:
-#   jaeger:
-#     collector_url: "jaeger-collector:14268"
-#     service_name: consumer-post
-#     sampler_type: const
-#     flush_interval: ""
+tracer:
+  jaeger:
+    collector_url: "jaeger-collector:14268"
+    service_name: consumer-post
+    sampler_type: const
+    flush_interval: ""
