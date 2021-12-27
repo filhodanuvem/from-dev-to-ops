@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/filhodanuvem/log-api/metric"
@@ -73,6 +74,8 @@ func paymentHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+	userPassword := os.Getenv("USER_PASSWORD")
+	log.Printf("Running service with USER_PASSWORD=%s", userPassword)
 	tp, err := tracex.NewProvider("http://jaeger-collector:14268/api/traces")
 	if err != nil {
 		log.Fatal(err)

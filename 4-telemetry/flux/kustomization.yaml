@@ -2,3 +2,4 @@ resources:
   - ./infrastructure
   - ./services/consumer-post/
   - ./services/api
+  - ../../5-secrets/flux

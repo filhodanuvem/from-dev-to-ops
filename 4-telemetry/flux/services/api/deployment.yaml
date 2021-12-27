@@ -4,7 +4,7 @@ metadata:
   name: payment-api
   namespace: filhodanuvem-services
   labels:
-    app: payment-api
+    app: payment-api 
 spec:
   replicas: 1
   selector:
@@ -18,9 +18,21 @@ spec:
           prometheus.io/scrape: "true"
           prometheus.io/port: "2222"
           prometheus.io/path: /metrics
+          vault.hashicorp.com/service: "http://vault:8200"
+          vault.hashicorp.com/agent-inject: 'true'
+          vault.hashicorp.com/agent-inject-status: 'update'
+          vault.hashicorp.com/role: 'app'
+          vault.hashicorp.com/agent-inject-secret-userpassword: 'secret/data/user/password'
+          vault.hashicorp.com/agent-inject-template-userpassword: |
+            {{ with secret "secret/data/user/password" -}}
+              export USER_PASSWORD="{{ .Data.data.user_password }}"
+            {{- end }}
     spec:
+      serviceAccountName: payments
       containers:
       - name: api
         image: cloudson/log-api:latest
         ports:
         - containerPort: 8081
+        args:
+            ['sh', '-c', 'source /vault/secrets/userpassword && ./main']

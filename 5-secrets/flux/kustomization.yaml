@@ -1,0 +1,4 @@
+resources:
+  - ./infrastructure
+  - ./repositories
+  - ./authorization
