@@ -45,11 +45,11 @@ jobs:
     - name: "Helm"
       run: | 
         helm package --version "${{ steps.bump_helm_version.outputs.next-version }}" 3-continuous-deployment/helm/producer
-        curl \
-          -X POST \
+        curl -X POST \
+          -H "Authorization: token ${GITHUB_TOKEN}" \
           -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/${GITHUB_REPOSITORY}/releases \
-            -d '{"tag_name": "producer-${{ steps.bump_helm_version.outputs.next-version }}"}'
+          -d '{"tag_name": "producer-${{ steps.bump_helm_version.outputs.next-version }}"}'
     
     
     # curl \
