@@ -19,6 +19,12 @@ jobs:
         cd - 
         cd 4-telemetry/flux/services/api
         make 
+  Helm:
+    name: "Helm release"
+    runs-on: ubuntu-latest
+    needs: Build
+    steps:
+    - uses: actions/checkout@v2
     - name: "Helm"
       run: |
         cd 3-continuous-deployment/helm/producer
