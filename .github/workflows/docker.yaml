@@ -36,6 +36,7 @@ jobs:
         echo "HELM_VERSION=${HELM_VERSION}" >> $GITHUB_ENV
         echo "Helm version: ${HELM_VERSION}"
     - name: Increment Semantic Version
+      id: bump_helm_version
       uses: christian-draeger/increment-semantic-version@1.0.2
       with:
         current-version: "${{ env.HELM_VERSION }}"
@@ -43,12 +44,12 @@ jobs:
     - uses: azure/setup-helm@v1
     - name: "Helm"
       run: | 
-        helm package --version ${{ steps.bump_version.outputs.next-version }} 3-continuous-deployment/helm/producer
+        helm package --version "${{ steps.bump_helm_version.outputs.next-version }}"" 3-continuous-deployment/helm/producer
         curl \
           -X POST \
           -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/${GITHUB_REPOSITORY}/releases \
-            -d '{"tag_name": "producer-${{ steps.bump_version.outputs.next-version }}"}'
+            -d '{"tag_name": "producer-${{ steps.bump_helm_version.outputs.next-version }}"}'
     
     
     # curl \
