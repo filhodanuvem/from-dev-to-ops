@@ -26,7 +26,7 @@ resource "vault_policy" "policy_user_password" {
   name = "dev-team"
 
   policy = <<EOT
-path "secret/data/user/password" {
+path "secret/data/database/*" {
   capabilities = ["read"]
 }
 EOT

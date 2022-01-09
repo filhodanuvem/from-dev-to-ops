@@ -20,12 +20,11 @@ spec:
           prometheus.io/path: /metrics
           vault.hashicorp.com/service: "http://vault:8200"
           vault.hashicorp.com/agent-inject: 'true'
-          vault.hashicorp.com/agent-inject-status: 'update'
           vault.hashicorp.com/role: 'app'
-          vault.hashicorp.com/agent-inject-secret-userpassword: 'secret/data/user/password'
-          vault.hashicorp.com/agent-inject-template-userpassword: |
-            {{ with secret "secret/data/user/password" -}}
-              export USER_PASSWORD="{{ .Data.data.user_password }}"
+          vault.hashicorp.com/agent-inject-secret-databasecredentials: 'secret/data/database/credentials'
+          vault.hashicorp.com/agent-inject-template-databasecredentials: |
+            {{ with secret "secret/data/database/credentials" -}}
+              export DB_PASSWORD="{{ .Data.data.password }}"
             {{- end }}
     spec:
       serviceAccountName: payments
@@ -35,4 +34,4 @@ spec:
         ports:
         - containerPort: 8081
         args:
-            ['sh', '-c', 'source /vault/secrets/userpassword && ./main']
+            ['sh', '-c', 'source /vault/secrets/databasecredentials && ./main']

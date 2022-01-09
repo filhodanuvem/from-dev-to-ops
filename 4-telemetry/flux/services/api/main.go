@@ -74,8 +74,8 @@ func paymentHandler(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-	userPassword := os.Getenv("USER_PASSWORD")
-	log.Printf("Running service with USER_PASSWORD=%s", userPassword)
+	userPassword := os.Getenv("DB_PASSWORD")
+	log.Printf("Running service with DB_PASSWORD=%s", userPassword)
 	tp, err := tracex.NewProvider("http://jaeger-collector:14268/api/traces")
 	if err != nil {
 		log.Fatal(err)
