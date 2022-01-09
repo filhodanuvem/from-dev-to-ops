@@ -13,7 +13,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: "Build"
       run: |
-        docker login --username cloudson
+        docker login --username cloudson --password ${{ secrets.DOCKERHUB_TOKEN }}
         cd 3-continuous-deployment/flux/services/producer
         make
         cd - 
