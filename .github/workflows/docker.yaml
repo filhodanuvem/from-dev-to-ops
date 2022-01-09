@@ -44,7 +44,7 @@ jobs:
     - uses: azure/setup-helm@v1
     - name: "Helm"
       run: |
-        sed 's/template_appVersion/${{ steps.bump_version.outputs.next-version }}/g' 3-continuous-deployment/helm/producer/Chart.yaml > 3-continuous-deployment/helm/producer/Chart.yaml
+        sed 's/latest/${{ env.GITHUB_SHA }}/g' 3-continuous-deployment/helm/producer/values.yaml > 3-continuous-deployment/helm/producer/values.yaml
         helm package --version "${{ steps.bump_helm_version.outputs.next-version }}" 3-continuous-deployment/helm/producer
     - uses: ncipollo/release-action@v1
       with:
