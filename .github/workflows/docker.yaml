@@ -33,7 +33,8 @@ jobs:
           -H "Accept: application/vnd.github.v3+json" \
           https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest > ./latest_release
         export HELM_VERSION=$(cat ./latest_release | sed 's/producer-//1' | jq -r '.tag_name')
-        echo "HELM_VERSION=${HELM_VERSION:-0.0.0}" >> $GITHUB_ENV
+        if [[ $HELM_VERSION == "null" ]]; then export HELM_VERSION="0.0.0" fi
+        echo "HELM_VERSION=${HELM_VERSION}" >> $GITHUB_ENV
         echo "Helm version: ${HELM_VERSION}"
     - name: Increment Semantic Version
       id: bump_helm_version
