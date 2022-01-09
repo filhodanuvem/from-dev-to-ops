@@ -1,6 +1,8 @@
+GITHUB_SHA ?= latest
+
 push: build
-	docker push cloudson/producer:latest
+	docker push cloudson/producer:${GITHUB_SHA}
 
 build: 
-	docker build . -t cloudson/producer:latest
+	docker build . -t cloudson/producer:${GITHUB_SHA}
 
