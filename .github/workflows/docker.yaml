@@ -40,14 +40,29 @@ jobs:
       with:
         current-version: "${{ env.HELM_VERSION }}"
         version-fragment: "feature"
-    - name: "Helm"  
-      run: |
-        cd 3-continuous-deployment/helm/producer
-        sed 's/latest/${{ secrets.GITHUB_SHA }}/g' values.yaml > values.yaml
-        sed 's/template_appVersion/${{ steps.bump_version.outputs.next-version }}/g' Chart.yaml > Chart.yaml
-        sed 's/template_appVersion/${{ steps.bump_version.outputs.next-version }}/g' ../index.yaml > ../index.yaml
-    - uses: helm/chart-releaser-action@v1.1.0
-      with:
-        charts_dir: 3-continuous-deployment/helm/producer
-      env:
-        CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"    
+    - uses: azure/setup-helm@v1
+    - name: "Helm"
+      run: | 
+        helm package --version ${{ steps.bump_version.outputs.next-version }} 3-continuous-deployment/helm/producer
+        curl \
+          -X POST \
+          -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${GITHUB_REPOSITORY}/releases \
+            -d '{"tag_name": "producer-${{ steps.bump_version.outputs.next-version }}"}'
+    
+    
+    # curl \
+    #   -X POST \
+    #   -H "Accept: application/vnd.github.v3+json" \
+    #   https://uploads.github.com/repos/octocat/hello-world/releases/42/assets
+    # - name: "Helm"  
+    #   run: |
+    #     cd 3-continuous-deployment/helm/producer
+    #     sed 's/latest/${{ secrets.GITHUB_SHA }}/g' values.yaml > values.yaml
+    #     sed 's/template_appVersion/${{ steps.bump_version.outputs.next-version }}/g' Chart.yaml > Chart.yaml
+    #     sed 's/template_appVersion/${{ steps.bump_version.outputs.next-version }}/g' ../index.yaml > ../index.yaml
+    # - uses: helm/chart-releaser-action@v1.1.0
+    #   with:
+    #     charts_dir: 3-continuous-deployment/helm/producer
+    #   env:
+    #     CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"    
