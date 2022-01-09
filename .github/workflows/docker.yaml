@@ -25,6 +25,8 @@ jobs:
     needs: Build
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
     - name: Find current version
       run: |
         curl \
