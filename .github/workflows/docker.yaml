@@ -46,7 +46,7 @@ jobs:
       run: helm package --version "${{ steps.bump_helm_version.outputs.next-version }}" 3-continuous-deployment/helm/producer
     - uses: ncipollo/release-action@v1
       with:
-        artifacts: "3-continuous-deployment/helm/producer-${{ steps.bump_helm_version.outputs.next-version }}.tgz"
+        artifacts: "3-continuous-deployment/helm/producer-*.tgz"
         token: ${{ secrets.GITHUB_TOKEN }}  
         prerelease: true
         name: "producer-${{ steps.bump_helm_version.outputs.next-version }}"  
