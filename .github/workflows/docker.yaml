@@ -29,6 +29,8 @@ jobs:
       run: |
         cd 3-continuous-deployment/helm/producer
         sed 's/latest/${{ secrets.GITHUB_SHA }}/g' values.yaml > values.yaml
+        cd ..
+        sed 's/template_appVersion/${{ secrets.GITHUB_SHA }}/g' index.yaml > index.yaml
     - uses: helm/chart-releaser-action@v1.1.0
       with:
         charts_dir: 3-continuous-deployment/helm
