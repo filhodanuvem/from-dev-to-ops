@@ -1,3 +1,11 @@
 apiVersion: v1
 entries: 
+  producer:
+  - apiVersion: v2
+  appVersion: template_appVersion
+  created: "2021-12-01T22:56:04.678388-07:00"
+  description: A Helm chart for producer
+  keywords: []
+  maintainers: []
+  name: payment-producer
 generated: "2021-12-01T22:30:01.824606Z"
