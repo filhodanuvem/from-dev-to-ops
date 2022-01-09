@@ -36,7 +36,7 @@ jobs:
     - name: Increment Semantic Version
       uses: christian-draeger/increment-semantic-version@1.0.2
       with:
-        current-version: "${HELM_VERSION}"
+        current-version: "${{ env.HELM_VERSION }}"
         version-fragment: "feature"
     - name: "Helm"  
       run: |
