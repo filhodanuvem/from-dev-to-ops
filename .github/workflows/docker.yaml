@@ -19,3 +19,12 @@ jobs:
         cd - 
         cd 4-telemetry/flux/services/api
         make 
+    - name: "Helm"
+      run: |
+        cd 3-continuous-deployment/helm/producer
+        sed 's/latest/${{ secrets.GITHUB_SHA }}/g' values.yaml > values.yaml
+    - uses: helm/chart-releaser-action@v1.1.0
+      with:
+        charts_dir: 3-continuous-deployment/helm/producer
+      env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"    

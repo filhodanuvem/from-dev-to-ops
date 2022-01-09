@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: payment-producer
-          image: cloudson/producer:latest
+          image: cloudson/producer:{{ .Values.imageTag }}
           env:
             - name: NATS_URL
               value: {{ .Values.nats.url }}

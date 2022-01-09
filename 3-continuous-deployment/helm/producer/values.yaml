@@ -1,7 +1,4 @@
-# Default values for producer.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
+imageTag: "latest" # this will be automatically replaced by the CI system
 replicaCount: 1
 
 nats:
