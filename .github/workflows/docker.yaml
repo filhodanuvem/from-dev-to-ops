@@ -43,7 +43,9 @@ jobs:
         version-fragment: "feature"
     - uses: azure/setup-helm@v1
     - name: "Helm"
-      run: helm package --version "${{ steps.bump_helm_version.outputs.next-version }}" 3-continuous-deployment/helm/producer
+      run: |
+        sed 's/template_appVersion/${{ steps.bump_version.outputs.next-version }}/g' 3-continuous-deployment/helm/producer/Chart.yaml > 3-continuous-deployment/helm/producer/Chart.yaml
+        helm package --version "${{ steps.bump_helm_version.outputs.next-version }}" 3-continuous-deployment/helm/producer
     - uses: ncipollo/release-action@v1
       with:
         artifacts: "producer-${{ steps.bump_helm_version.outputs.next-version }}.tgz"
@@ -51,20 +53,4 @@ jobs:
         prerelease: true
         name: "producer-${{ steps.bump_helm_version.outputs.next-version }}"  
         tag: "producer-${{ steps.bump_helm_version.outputs.next-version }}"
-        commit: "${{ env.GITHUB_SHA }}"
-
-    # curl \
-    #   -X POST \
-    #   -H "Accept: application/vnd.github.v3+json" \
-    #   https://uploads.github.com/repos/octocat/hello-world/releases/42/assets
-    # - name: "Helm"  
-    #   run: |
-    #     cd 3-continuous-deployment/helm/producer
-    #     sed 's/latest/${{ secrets.GITHUB_SHA }}/g' values.yaml > values.yaml
-    #     sed 's/template_appVersion/${{ steps.bump_version.outputs.next-version }}/g' Chart.yaml > Chart.yaml
-    #     sed 's/template_appVersion/${{ steps.bump_version.outputs.next-version }}/g' ../index.yaml > ../index.yaml
-    # - uses: helm/chart-releaser-action@v1.1.0
-    #   with:
-    #     charts_dir: 3-continuous-deployment/helm/producer
-    #   env:
-    #     CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"    
+        commit: "${{ env.GITHUB_SHA }}"    
