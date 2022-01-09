@@ -1,0 +1,20 @@
+name: 'Terraform'
+
+on:
+  push:
+    branches: 
+    - master
+
+jobs:
+  Build:
+    name: "Docker build"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: "Build"
+      run: |
+        cd 3-continuous-delivery/flux/services/producer
+        make
+        cd - 
+        cd 4-telemetry/flux/services/api
+        make 
