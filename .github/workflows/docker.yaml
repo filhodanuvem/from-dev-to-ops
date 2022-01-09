@@ -30,7 +30,7 @@ jobs:
         curl \
           -H "Accept: application/vnd.github.v3+json" \
           https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest > ./latest_release
-        export HELM_VERSION=$(cat ./latest_release | sed 'producer-//1| jq -r '.tag_name')
+        export HELM_VERSION=$(cat ./latest_release | sed 's/producer-//1' | jq -r '.tag_name')
         echo "Helm version: ${HELM_VERSION}"
     - name: Increment Semantic Version
       uses: christian-draeger/increment-semantic-version@1.0.2
