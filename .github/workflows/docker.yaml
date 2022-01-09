@@ -25,14 +25,25 @@ jobs:
     needs: Build
     steps:
     - uses: actions/checkout@v2
-    - name: "Helm"
+    - name: Find current version
+      run: |
+        curl \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest > ./latest_release
+        export HELM_VERSION=$(cat ./latest_release | jq -r '.tag_name')
+        echo "Helm version: ${HELM_VERSION}"
+    - name: Increment Semantic Version
+      uses: christian-draeger/increment-semantic-version@1.0.2
+      with:
+        current-version: "{{ env.HELM_VERSION }}"
+        version-fragment: "feature"
+    - name: "Helm"  
       run: |
         cd 3-continuous-deployment/helm/producer
         sed 's/latest/${{ secrets.GITHUB_SHA }}/g' values.yaml > values.yaml
-        cd ..
-        sed 's/template_appVersion/${{ secrets.GITHUB_SHA }}/g' index.yaml > index.yaml
+        sed 's/template_appVersion/${{ steps.bump_version.outputs.next-version }}/g' Chart.yaml > Chart.yaml
     - uses: helm/chart-releaser-action@v1.1.0
       with:
         charts_dir: 3-continuous-deployment/helm
       env:
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"    
+        CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"    
