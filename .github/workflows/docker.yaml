@@ -44,7 +44,7 @@ jobs:
     - uses: azure/setup-helm@v1
     - name: "Helm"
       run: | 
-        helm package --version "${{ steps.bump_helm_version.outputs.next-version }}"" 3-continuous-deployment/helm/producer
+        helm package --version "${{ steps.bump_helm_version.outputs.next-version }}" 3-continuous-deployment/helm/producer
         curl \
           -X POST \
           -H "Accept: application/vnd.github.v3+json" \
