@@ -31,6 +31,6 @@ jobs:
         sed 's/latest/${{ secrets.GITHUB_SHA }}/g' values.yaml > values.yaml
     - uses: helm/chart-releaser-action@v1.1.0
       with:
-        charts_dir: 3-continuous-deployment/helm/producer
+        charts_dir: 3-continuous-deployment/helm
       env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"    
