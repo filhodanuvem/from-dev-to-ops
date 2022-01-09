@@ -46,6 +46,6 @@ jobs:
         sed 's/template_appVersion/${{ steps.bump_version.outputs.next-version }}/g' ../index.yaml > ../index.yaml
     - uses: helm/chart-releaser-action@v1.1.0
       with:
-        charts_dir: 3-continuous-deployment/helm
+        charts_dir: 3-continuous-deployment/helm/producer
       env:
         CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"    
