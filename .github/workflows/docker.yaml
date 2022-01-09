@@ -45,7 +45,7 @@ jobs:
     - name: "Helm"
       run: |
         cd 3-continuous-deployment/helm/producer
-        sed 's/latest/$GITHUB_SHA/g' values.yaml > values.yaml
+        sed 's/latest/${{ secrets.GITHUB_SHA }}/g' values.yaml > values.yaml
         cd - 
         helm package --version "${{ steps.bump_helm_version.outputs.next-version }}" 3-continuous-deployment/helm/producer
     - uses: ncipollo/release-action@v1
@@ -55,4 +55,4 @@ jobs:
         draft: true
         name: "producer-${{ steps.bump_helm_version.outputs.next-version }}"  
         tag: "producer-${{ steps.bump_helm_version.outputs.next-version }}"
-        commit: "$GITHUB_SHA"    
+        commit: "${{ env.GITHUB_SHA }}"    
