@@ -43,15 +43,13 @@ jobs:
         version-fragment: "feature"
     - uses: azure/setup-helm@v1
     - name: "Helm"
-      run: | 
-        helm package --version "${{ steps.bump_helm_version.outputs.next-version }}" 3-continuous-deployment/helm/producer
-        curl -X POST \
-          -H "Authorization: token $CLOUD_GITHUB_TOKEN" \
-          -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${GITHUB_REPOSITORY}/releases \
-          -d '{"tag_name": "producer-${{ steps.bump_helm_version.outputs.next-version }}"}'
-    
-    
+      run: helm package --version "${{ steps.bump_helm_version.outputs.next-version }}" 3-continuous-deployment/helm/producer
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: "3-continuous-deployment/helm/producer-${{ steps.bump_helm_version.outputs.next-version }}.tgz"
+        token: ${{ secrets.GITHUB_TOKEN }}    
+
+
     # curl \
     #   -X POST \
     #   -H "Accept: application/vnd.github.v3+json" \
