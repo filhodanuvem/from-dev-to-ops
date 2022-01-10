@@ -4,6 +4,8 @@ on:
   push:
     branches: 
     - master
+    paths:
+    - 3-continuous-deployment/flux/services/producer
 
 jobs:
   Build:
@@ -48,14 +50,13 @@ jobs:
     - name: "Helm"
       run: |
         cd 3-continuous-deployment/helm/producer
-        sed 's/latest/${{ secrets.GITHUB_SHA }}/g' values.yaml > values.yaml
+        sed 's/latest/${{ env.GITHUB_SHA }}/g' values.yaml > values.yaml
         cd - 
         helm package --version "${{ steps.bump_helm_version.outputs.next-version }}" 3-continuous-deployment/helm/producer
     - uses: ncipollo/release-action@v1
       with:
         artifacts: "producer-${{ steps.bump_helm_version.outputs.next-version }}.tgz"
-        token: ${{ secrets.GITHUB_TOKEN }}  
-        draft: true
+        token: ${{ secrets.GITHUB_TOKEN }}
         name: "producer-${{ steps.bump_helm_version.outputs.next-version }}"  
         tag: "producer-${{ steps.bump_helm_version.outputs.next-version }}"
         commit: "${{ env.GITHUB_SHA }}"    
