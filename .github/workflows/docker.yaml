@@ -5,7 +5,7 @@ on:
     branches: 
     - master
     paths:
-    - 3-continuous-deployment/flux/services/producer
+    - 3-continuous-deployment/flux/services/producer/*
 
 jobs:
   Build:

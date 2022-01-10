@@ -41,7 +41,7 @@ type message struct {
 }
 
 func main() {
-	log.Print("Running producer...\n")
+	log.Println("Running producer...")
 	prometheus.Register(bmetric)
 	tp, err := tracex.NewProvider("http://jaeger-collector:14268/api/traces")
 	if err != nil {
