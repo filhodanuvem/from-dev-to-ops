@@ -50,7 +50,7 @@ jobs:
     - name: "Helm"
       run: |
         cd 3-continuous-deployment/helm/producer
-        sed -i 's/latest/${{ env.GITHUB_SHA }}/g' values.yaml
+        sed -i 's/latest/'"$GITHUB_SHA'"/g' values.yaml
         cd - 
         helm package --version "${{ steps.bump_helm_version.outputs.next-version }}" 3-continuous-deployment/helm/producer
     - uses: ncipollo/release-action@v1
