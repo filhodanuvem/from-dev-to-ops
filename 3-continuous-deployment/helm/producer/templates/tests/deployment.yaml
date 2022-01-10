@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-producer
+  namespace: filhodanuvem-services
+  labels:
+    app: payment-producer
+spec:
+  replicas: {{ default 1 .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: payment-producer
+  template:
+    metadata:
+      labels:
+        app: payment-producer
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "2222"
+        prometheus.io/path: /metrics
+    spec:
+      containers:
+        - name: payment-producer
+          image: cloudson/producer:{{ default "latest" .Values.imageTag | quote }}
+          env:
+            - name: NATS_URL
+              value: {{ default "" .Values.nats.url | quote }}
+            - name: NATS_SUBJECT
+              value: {{ default "" .Values.nats.subject | quote }}

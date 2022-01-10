@@ -1,0 +1,18 @@
+name: 'Helm'
+
+on:
+  push:
+    branches:
+    - master
+
+jobs:
+  Test:
+    name: "Test"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: helm/kind-action@v1.2.0
+    - uses: azure/setup-helm@v1
+    - name: "Helm"
+      run: |
+        helm install producer ./3-continuous-deployment/helm/producer
+        helm test producer
