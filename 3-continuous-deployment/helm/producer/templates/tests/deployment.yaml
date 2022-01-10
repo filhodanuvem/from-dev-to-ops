@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: payment-producer
+  name: "{{ .Release.Name }}-payment-producer-test"
   namespace: filhodanuvem-services
   labels:
     app: payment-producer
