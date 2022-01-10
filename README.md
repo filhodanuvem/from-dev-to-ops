@@ -1,4 +1,8 @@
-# Infra Study 
+# From Dev To Ops
+
+👷🏾‍♂️ Work in progress
+
+A set of exercises for backend engineers who would like to jump into devops technologies. 
 
 - [x] 1 - AWS Networking - Basics with Lambda 
 - [x] 2 - kubernetes cluster
