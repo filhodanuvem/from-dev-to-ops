@@ -15,5 +15,6 @@ jobs:
     - uses: azure/setup-helm@v1
     - name: "Helm"
       run: |
-        helm install producer ./3-continuous-deployment/helm/producer -n default
+        kubectl create namespace filhodanuvem-services
+        helm install producer ./3-continuous-deployment/helm/producer
         helm test producer
