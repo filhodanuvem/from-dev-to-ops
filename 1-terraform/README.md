@@ -7,7 +7,10 @@ The idea of this chapter is to get familiar with terraform since you will use it
 I recommend you the solve the following problem, because there are a lot of networking concepts involved on it and that might be helpful in the next chapter. 
 
 ```
-Create and deploy a lambda function that is not accessible outside of a private network but which has access to https://checkip.amazonaws.com/. Use terraform to manage the resources. 
+Create and deploy a lambda function that is not 
+accessible outside of a private network but which 
+has access to https://checkip.amazonaws.com/. 
+Use terraform to manage the resources. 
 ```
 
 ### References 
