@@ -11,11 +11,10 @@ A set of exercises for software engineers who would like to jump into devops tec
 - [x] 3 - Continuous Deployment
 - [x] 4 - Telemetry (grafana / jaeger )
 - [x] 5 - Secrets (sealed secret / vault)
-- [x] 6 - Continuous Integration (Helm chart) 
-- [ ] 7 - Continuous Integration (TF and helm tests)
-- [ ] 8 - Cluster meshes (Istio / Cilium)
-- [ ] 9 - Distributed databases (CockroachDB)
-- [ ] 10 - Persistent Volumes
+- [x] 6 - Continuous Integration (Helm chart, Helm tests, TF tests) 
+- [ ] 7 - Cluster meshes (Istio / Cilium)
+- [ ] 8 - Distributed databases (CockroachDB)
+- [ ] 9 - Persistent Volumes
 
 ### How to study
 
