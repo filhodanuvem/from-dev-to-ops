@@ -9,7 +9,7 @@ If you are not familiar with Docker, this is the best moment to get into it. You
 - How to upload the image to a docker registry, most common one is [dockerhub](https://hub.docker.com/).
 
 
-\* A common mistake of beginners on Docker is to misunderstand the usage of volumes. You must not run the container pointing to a volume where the dependencies live. You should be able to send the link of your image in the registry to a friend of you, and they would use it to run a container in a different machine. 
+\* A common mistake of beginners on Docker is to misunderstand the usage of volumes. Do not run the container pointing to a volume where the dependencies live. You should be able to send the link of your image in the registry to a friend of you, and they would use it to run a container in their own machine. 
 
 <details>
   <summary>Suggested roadmap</summary>
