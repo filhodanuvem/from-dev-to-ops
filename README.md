@@ -19,5 +19,5 @@ A set of exercises for software engineers who would like to jump into devops tec
 ### How to study
 
 You can use this repository in two different ways; 
-* Do every exercise from the scratch following the README files on each chapter folder. As I'm using this repo to add my solutions, create your own to put yours.  
+* Do every exercise from the scratch following the README files on each chapter folder. As I'm using this repo to add my solutions, create your own to put your code.  
 * Another option would be simply reading the problem and looking at the current solution, in case of suggestion please open an issue or send a pull request.   
