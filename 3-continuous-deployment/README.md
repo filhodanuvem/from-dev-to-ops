@@ -5,11 +5,11 @@ On this chapter you should focus on how to deliver systems into a kubernetes clu
 
 If you are not familiar with Docker, this is the best moment to get into it. You should focus on three things: 
 - How to create a docker image that contains everything needed to run one small piece of software.
-- How to use the image to run a container*. 
+- How to use the image to run a container *. 
 - How to upload the image to a docker registry, most common one is [dockerhub](https://hub.docker.com/).
 
 
-* A common mistake of beginners on Docker is to misunderstand the usage of volumes. You must not run the container pointing to a volume where the dependencies live. You should be able to send the link of your image in the registry to a friend of you, and they would use it to run a container in a different machine. 
+\* A common mistake of beginners on Docker is to misunderstand the usage of volumes. You must not run the container pointing to a volume where the dependencies live. You should be able to send the link of your image in the registry to a friend of you, and they would use it to run a container in a different machine. 
 
 <details>
   <summary>Suggested roadmap</summary>
