@@ -2,4 +2,4 @@ resources:
   - ./infrastructure
   - ./repositories
   - ./authorization
-  - ../7-service-mesh/flux
+  - ../../7-service-mesh/flux
