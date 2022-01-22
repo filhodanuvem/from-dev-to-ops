@@ -1,0 +1,18 @@
+# {{ if .Values.cilium.enabled }}
+apiVersion: "cilium.io/v2"
+kind: CiliumNetworkPolicy
+metadata:
+  name: "payment-producer-cilium-policy"
+spec:
+  endpointSelector:
+    matchLabels:
+      app: payment-producer
+  egress:
+  - toEndpoints:
+    - matchLabels:
+        name: nats
+    toPorts:
+    - ports:
+      - port: "4222"
+        protocol: TCP
+# {{ end }}

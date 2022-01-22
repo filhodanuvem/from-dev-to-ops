@@ -8,3 +8,6 @@ replicaCount: 1
 nats:
   url: ""
   subject: ""
+
+cilium:
+  enabled: true
