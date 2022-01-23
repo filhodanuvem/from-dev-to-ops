@@ -52,10 +52,10 @@ jobs:
         cd 3-continuous-deployment/helm/producer
         sed -i 's/latest/'"$GITHUB_SHA"'/g' values.yaml
         cd - 
-        helm package --version "${{ steps.bump_helm_version.outputs.next-version }}" 3-continuous-deployment/helm/producer
+        helm package --version "${{ steps.bump_helm_version.outputs.next-version }}" 3-continuous-deployment/helm/producer --destination .deploy
     - uses: helm/chart-releaser-action@v1.2.0
       with:
-        charts_dir: 3-continuous-deployment/helm/
+        charts_dir: .deploy
         config: cr.yaml
         charts_repo_url: https://filhodanuvem.github.io/from-dev-to-ops/3-continuous-deployment/helm/
       env:
