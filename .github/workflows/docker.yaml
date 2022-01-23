@@ -53,10 +53,16 @@ jobs:
         sed -i 's/latest/'"$GITHUB_SHA"'/g' values.yaml
         cd - 
         helm package --version "${{ steps.bump_helm_version.outputs.next-version }}" 3-continuous-deployment/helm/producer
-    - uses: ncipollo/release-action@v1
+    - uses: helm/chart-releaser-action@v1.2.0
       with:
-        artifacts: "producer-${{ steps.bump_helm_version.outputs.next-version }}.tgz"
-        token: ${{ secrets.GITHUB_TOKEN }}
-        name: "producer-${{ steps.bump_helm_version.outputs.next-version }}"  
-        tag: "producer-${{ steps.bump_helm_version.outputs.next-version }}"
-        commit: "${{ env.GITHUB_SHA }}"    
+        charts_dir: 3-continuous-deployment/helm/
+        config: cr.yaml
+        charts_repo_url: https://filhodanuvem.github.io/from-dev-to-ops/3-continuous-deployment/helm/
+      env:
+        CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"  
+        
+        # artifacts: "producer-${{ steps.bump_helm_version.outputs.next-version }}.tgz"
+        # token: ${{ secrets.GITHUB_TOKEN }}
+        # name: "producer-${{ steps.bump_helm_version.outputs.next-version }}"  
+        # tag: "producer-${{ steps.bump_helm_version.outputs.next-version }}"
+        # commit: "${{ env.GITHUB_SHA }}"    
