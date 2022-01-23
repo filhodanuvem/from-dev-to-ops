@@ -1,8 +1,8 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta1
-kind: GitRepository
+kind: HelmRepository
 metadata:
   name: payment-producer
   namespace: flux-system
 spec:
   interval: 1m
-  url: https://github.com/filhodanuvem/from-dev-to-ops/
+  url: https://filhodanuvem.github.io/from-dev-to-ops

@@ -7,14 +7,16 @@ spec:
   interval: 1m
   chart:
     spec:
-      chart: ./3-continuous-deployment/helm/producer
+      chart: producer
       version: 0.1.0
       sourceRef: 
-        kind: GitRepository
+        kind: HelmRepository
         name: payment-producer
         namespace: filhodanuvem-services
       interval: 1m
   values:
+    cilium: 
+      enabled: true
     nats:
       url: "nats://nats:4222"
       subject: "payment.orders"

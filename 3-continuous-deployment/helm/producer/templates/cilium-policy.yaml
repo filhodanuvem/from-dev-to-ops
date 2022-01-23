@@ -1,4 +1,4 @@
-# {{ if .Values.cilium.enabled }}
+{{ if .Values.cilium.enabled }}
 apiVersion: "cilium.io/v2"
 kind: CiliumNetworkPolicy
 metadata:
@@ -15,4 +15,4 @@ spec:
     - ports:
       - port: "4222"
         protocol: TCP
-# {{ end }}
+{{ end }}
