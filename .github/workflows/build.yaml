@@ -23,7 +23,7 @@ jobs:
         cd 4-telemetry/flux/services/api
         make
   Test:
-    name: "Test"
+    name: "Helm Test"
     runs-on: ubuntu-latest
     needs: Build
     steps:
@@ -36,7 +36,7 @@ jobs:
         helm install producer ./3-continuous-deployment/helm/producer
         helm test producer 
   Helm:
-    name: "Helm release"
+    name: "Helm build"
     runs-on: ubuntu-latest
     needs: Test
     steps:
