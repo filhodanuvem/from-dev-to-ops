@@ -2,6 +2,15 @@ apiVersion: v1
 entries:
   producer:
   - apiVersion: v2
+    created: "2022-01-23T19:42:26.877750625Z"
+    description: A Helm chart for Kubernetes
+    digest: 9dd9a6b14e8dad277f19ec2d8453c97dc3f069bd43ba0dea22535681d3dd55e1
+    name: producer
+    type: application
+    urls:
+    - https://github.com/filhodanuvem/from-dev-to-ops/releases/download/producer-0.2.0/producer-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v2
     created: "2022-01-23T16:40:04.389266447Z"
     description: A Helm chart for Kubernetes
     digest: 376580ea979dd11b174b551f3363e1f263f35761533fb0a8c6d4346ff398cf4c
@@ -10,4 +19,4 @@ entries:
     urls:
     - https://github.com/filhodanuvem/from-dev-to-ops/releases/download/producer-0.1.0/producer-0.1.0.tgz
     version: 0.1.0
-generated: "2022-01-23T16:40:04.389273348Z"
+generated: "2022-01-23T19:42:26.877766525Z"
