@@ -10,4 +10,4 @@ nats:
   subject: ""
 
 cilium:
-  enabled: true
+  enabled: false
