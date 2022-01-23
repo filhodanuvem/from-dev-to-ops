@@ -1,2 +1,3 @@
 owner: filhodanuvem
-git-base-url: https://api.github.com/
+git-repo: from-dev-to-ops
+package-path: .deploy
