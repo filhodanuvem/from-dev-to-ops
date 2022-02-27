@@ -7,15 +7,26 @@ flux-install:
 		sudo mv flux /usr/local/bin/flux && \
 		rm flux.tar.gz
 
+cilium-install:
+	curl -L --remote-name-all https://github.com/cilium/cilium-cli/releases/latest/download/cilium-darwin-amd64.tar.gz{,.sha256sum} && \
+		shasum -a 256 -c cilium-darwin-amd64.tar.gz.sha256sum && \
+		sudo tar xzvfC cilium-darwin-amd64.tar.gz /usr/local/bin && \
+		rm cilium-darwin-amd64.tar.gz{,.sha256sum}
+
 kind-start:
-	@kind create cluster --image=kindest/node:v1.23.0
+	@kind create cluster --image=kindest/node:v1.23.0 --config=kind.yaml
+
+cilium-start:
+	@cilium install
+	@cilium status --wait
+
 
 stop:
 	@kubectl delete -k ../../3-continuous-deployment/flux
 	@flux uninstall --namespace=flux-system
 	@kind delete cluster
 
-start: kind-start
+start: kind-start cilium-start
 	@flux install --namespace=flux-system
 	flux create source git from-dev-to-ops \
 	--branch=master \
