@@ -1,0 +1,12 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-outside-cluster
+spec:
+  endpointSelector: {}
+  ingress:
+    - fromEntities:
+        - world
+  egress:
+    - toEntities:
+        - world

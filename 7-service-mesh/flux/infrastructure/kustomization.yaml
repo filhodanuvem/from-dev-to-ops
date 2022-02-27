@@ -1,2 +1,3 @@
 resources:
   - ./cilium-release.yaml
+  - ./default-policy.yaml
