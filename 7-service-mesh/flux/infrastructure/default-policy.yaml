@@ -3,11 +3,17 @@ kind: CiliumNetworkPolicy
 metadata:
   name: allow-outside-cluster
   namespace: filhodanuvem-services
-spec:
-  endpointSelector: {}
-  ingress:
-    - fromEntities:
-        - world
-  egress:
-    - toEntities:
-        - world
+specs:
+  - endpointSelector: {}
+    ingress:
+      - fromEntities:
+          - world
+    egress:
+      - toEntities:
+          - world
+  - endpointSelector: {}
+    egress:
+    - toEndpoints:
+      - matchLabels:
+          "k8s:io.kubernetes.pod.namespace": kube-system
+          "k8s:k8s-app": kube-dns

@@ -22,8 +22,6 @@ cilium-start:
 
 
 stop:
-	@kubectl delete -k ../../3-continuous-deployment/flux
-	@flux uninstall --namespace=flux-system
 	@kind delete cluster
 
 start: kind-start cilium-start
@@ -37,3 +35,6 @@ start: kind-start cilium-start
   --path="./3-continuous-deployment/flux" \
   --interval=10m \
   --health-check-timeout=2m
+
+kubefwd:
+	sudo kubefwd svc -n filhodanuvem-services
