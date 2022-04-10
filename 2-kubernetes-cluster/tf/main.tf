@@ -25,6 +25,8 @@ terraform {
       version = ">= 4.5.2"
     }
   }
+
+  backend "remote" {}
 }
 
 provider "aws" {

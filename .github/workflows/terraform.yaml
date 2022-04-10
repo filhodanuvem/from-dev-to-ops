@@ -3,6 +3,10 @@ name: 'Terraform'
 on:
   pull_request:
 
+defaults:
+  run:
+    working-directory: 2-kubernetes-cluster/tf
+
 jobs:
   Terraform:
     name: "Terraform"
@@ -11,3 +15,41 @@ jobs:
     - uses: hashicorp/setup-terraform@v1
       with:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+   
+    - name: Check out code
+      uses: actions/checkout@v2.4.0
+
+    - run: terraform init -backend-config=./backends/config.cloud.tfbackend
+      id: init
+
+    - name: Terraform Plan
+      id: plan
+      run: terraform plan -no-color
+      continue-on-error: true
+    
+    - name: Update Pull Request
+      uses: actions/github-script@v5
+      if: github.event_name == 'pull_request'
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const planOutput = ${{ steps.plan.outputs.values().join('\n') }}
+          const output = `#### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+          #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+          
+          <details><summary>Show Plan</summary>
+
+          \`\`\`\n
+          ${planOutput}"
+          \`\`\`
+
+          </details>
+
+          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+          })
